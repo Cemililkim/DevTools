@@ -1,0 +1,171 @@
+﻿@{
+    ViewData["Title"] = "URL Encoder/Decoder";
+}
+
+<div class="container">
+    <div class="tool-header">
+        <h1 class="tool-title">URL Encoder / Decoder</h1>
+        <p class="tool-description">
+            Encode or decode your URL strings easily.
+        </p>
+    </div>
+
+    <div class="tab-container">
+        <div class="tab-nav">
+            <button class="tab-button active" data-tab="url-encode">Encode</button>
+            <button class="tab-button" data-tab="url-decode">Decode</button>
+        </div>
+
+        <!-- Encode Tab -->
+        <div class="tab-content" id="url-encode">
+            <div class="form-group">
+                <label class="form-label">Text to Encode:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>Input</span>
+                        <button class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('encodeUrlInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="encodeUrlInput" placeholder="https://example.com/query?name=John Doe&age=25"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" onclick="encodeUrl()">
+                    <span class="loading-spinner" id="encodeUrlSpinner" style="display: none;"></span>
+                    Encode
+                </button>
+            </div>
+            <div class="results-container" id="encodeUrlResults" style="display: none;">
+                <div class="results-header">
+                    <span>Encoded URL</span>
+                    <button class="btn btn-secondary btn-sm" onclick="copyToClipboard('encodeUrlOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="encodeUrlOutput"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decode Tab -->
+        <div class="tab-content" id="url-decode" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">URL to Decode:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>Input</span>
+                        <button class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('decodeUrlInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="decodeUrlInput" placeholder="https%3A%2F%2Fexample.com%2Fquery%3Fname%3DJohn%20Doe%26age%3D25"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-primary" onclick="decodeUrl()">
+                    <span class="loading-spinner" id="decodeUrlSpinner" style="display: none;"></span>
+                    Decode
+                </button>
+            </div>
+            <div class="results-container" id="decodeUrlResults" style="display: none;">
+                <div class="results-header">
+                    <span>Decoded URL</span>
+                    <button class="btn btn-secondary btn-sm" onclick="copyToClipboard('decodeUrlOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="decodeUrlOutput"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="alertContainer"></div>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+                this.classList.add('active');
+                document.getElementById(tabId).style.display = 'block';
+            });
+        });
+
+        function clearInput(id) {
+            document.getElementById(id).value = '';
+        }
+
+        async function copyToClipboard(id) {
+            const element = document.getElementById(id);
+            try {
+                await navigator.clipboard.writeText(element.textContent);
+                showAlert('Copied to clipboard!', 'success');
+            } catch {
+                showAlert('Failed to copy.', 'error');
+            }
+        }
+
+        function showLoading(id, show) {
+            document.getElementById(id).style.display = show ? 'inline-block' : 'none';
+        }
+
+        function showAlert(message, type = 'error') {
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            document.getElementById('alertContainer').appendChild(alert);
+            setTimeout(() => alert.remove(), 4000);
+        }
+
+        async function encodeUrl() {
+            const input = document.getElementById('encodeUrlInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter text to encode.', 'warning');
+                return;
+            }
+
+            showLoading('encodeUrlSpinner', true);
+
+            const response = await fetch('@Url.Action("Encode", "Url")', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `input=${encodeURIComponent(input)}`
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                document.getElementById('encodeUrlOutput').textContent = result.result;
+                document.getElementById('encodeUrlResults').style.display = 'block';
+            } else {
+                showAlert(result.error, 'error');
+            }
+
+            showLoading('encodeUrlSpinner', false);
+        }
+
+        async function decodeUrl() {
+            const input = document.getElementById('decodeUrlInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter text to decode.', 'warning');
+                return;
+            }
+
+            showLoading('decodeUrlSpinner', true);
+
+            const response = await fetch('@Url.Action("Decode", "Url")', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `input=${encodeURIComponent(input)}`
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                document.getElementById('decodeUrlOutput').textContent = result.result;
+                document.getElementById('decodeUrlResults').style.display = 'block';
+            } else {
+                showAlert(result.error, 'error');
+            }
+
+            showLoading('decodeUrlSpinner', false);
+        }
+    </script>
+}
