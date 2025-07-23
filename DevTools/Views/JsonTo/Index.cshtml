@@ -1,0 +1,396 @@
+﻿@{
+    ViewData["Title"] = "JSON Converter";
+}
+
+<div class="tool-container">
+    <div class="tool-header">
+        <h1 class="tool-title">JSON Converter</h1>
+        <p class="tool-description">
+            Convert your JSON data to different formats or convert other formats to JSON.
+        </p>
+    </div>
+
+    <div class="tab-container">
+        <div class="tab-nav">
+            <button class="tab-button active" data-tab="json-to-csv">JSON → CSV</button>
+            <button class="tab-button" data-tab="json-to-xml">JSON → XML</button>
+            <button class="tab-button" data-tab="json-to-yaml">JSON → YAML</button>
+            <button class="tab-button" data-tab="json-to-html">JSON → HTML</button>
+            <button class="tab-button" data-tab="format-json">Format JSON</button>
+        </div>
+
+        <!-- JSON to CSV Tab -->
+        <div class="tab-content" id="json-to-csv">
+            <div class="form-group">
+                <label class="form-label">JSON Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>JSON Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('jsonToCsvInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="jsonToCsvInput" placeholder='[{"name": "John", "age": 25}, {"name": "Jane", "age": 30}]'></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="convertToCSV()">
+                    <span class="loading-spinner" id="csvLoadingSpinner" style="display: none;"></span>
+                    Convert to CSV
+                </button>
+            </div>
+            <div class="results-container" id="csvResults" style="display: none;">
+                <div class="results-header">
+                    <span>CSV Result</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('csvOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="csvOutput"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- JSON to XML Tab -->
+        <div class="tab-content" id="json-to-xml" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">JSON Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>JSON Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('jsonToXmlInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="jsonToXmlInput" placeholder='{"person": {"name": "John", "age": 25, "hobbies": ["reading", "programming"]}}'></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="convertToXML()">
+                    <span class="loading-spinner" id="xmlLoadingSpinner" style="display: none;"></span>
+                    Convert to XML
+                </button>
+            </div>
+            <div class="results-container" id="xmlResults" style="display: none;">
+                <div class="results-header">
+                    <span>XML Result</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('xmlOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="xmlOutput"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- JSON to YAML Tab -->
+        <div class="tab-content" id="json-to-yaml" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">JSON Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>JSON Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('jsonToYamlInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="jsonToYamlInput" placeholder='{"server": {"host": "localhost", "port": 8080, "features": ["ssl", "compression"]}}'></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="convertToYAML()">
+                    <span class="loading-spinner" id="yamlLoadingSpinner" style="display: none;"></span>
+                    Convert to YAML
+                </button>
+            </div>
+            <div class="results-container" id="yamlResults" style="display: none;">
+                <div class="results-header">
+                    <span>YAML Result</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('yamlOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="yamlOutput"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- JSON to HTML Table Tab -->
+        <div class="tab-content" id="json-to-html" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">JSON Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>JSON Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('jsonToHtmlInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="jsonToHtmlInput" placeholder='[{"name": "John", "age": 25, "city": "New York"}, {"name": "Jane", "age": 30, "city": "London"}]'></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="convertToHTML()">
+                    <span class="loading-spinner" id="htmlLoadingSpinner" style="display: none;"></span>
+                    Convert to HTML Table
+                </button>
+            </div>
+            <div class="results-container" id="htmlResults" style="display: none;">
+                <div class="results-header">
+                    <span>HTML Table Result</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('htmlOutput')">Copy HTML</button>
+                </div>
+                <div class="results-content">
+                    <div class="html-preview" id="htmlPreview"></div>
+                    <details style="margin-top: 10px;">
+                        <summary style="cursor: pointer; font-weight: bold;">View HTML Source</summary>
+                        <pre class="code-editor" id="htmlOutput" style="margin-top: 10px;"></pre>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+        <!-- Format JSON Tab -->
+        <div class="tab-content" id="format-json" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">JSON Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>JSON Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('formatJsonInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="formatJsonInput" placeholder='{"name":"John","age":25,"city":"New York"}'></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="formatJSON()">
+                    <span class="loading-spinner" id="formatLoadingSpinner" style="display: none;"></span>
+                    Format JSON
+                </button>
+            </div>
+            <div class="results-container" id="formatResults" style="display: none;">
+                <div class="results-header">
+                    <span>Formatted JSON</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('formatOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="formatOutput"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+</div>
+
+@section Scripts {
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+
+                // Remove active class from all buttons and content
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+
+                // Add active class to clicked button and show content
+                this.classList.add('active');
+                document.getElementById(tabId).style.display = 'block';
+            });
+        });
+
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `<span>${message}</span>`;
+
+            alertContainer.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        function showLoading(spinnerId, show) {
+            const spinner = document.getElementById(spinnerId);
+            spinner.style.display = show ? 'inline-block' : 'none';
+        }
+
+        function clearInput(inputId) {
+            document.getElementById(inputId).value = '';
+        }
+
+        async function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            try {
+                await navigator.clipboard.writeText(element.textContent);
+                showAlert('Copied to clipboard!', 'success');
+            } catch (err) {
+                showAlert('Copy operation failed.', 'error');
+            }
+        }
+
+        async function convertToCSV() {
+            const input = document.getElementById('jsonToCsvInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter JSON data.', 'warning');
+                return;
+            }
+
+            showLoading('csvLoadingSpinner', true);
+
+            try {
+                const response = await fetch('@Url.Action("ConvertToCSV", "JsonTo")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `jsonInput=${encodeURIComponent(input)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('csvOutput').textContent = result.result;
+                    document.getElementById('csvResults').style.display = 'block';
+                    showAlert('JSON successfully converted to CSV!', 'success');
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('An error occurred: ' + error.message, 'error');
+            } finally {
+                showLoading('csvLoadingSpinner', false);
+            }
+        }
+
+        async function convertToXML() {
+            const input = document.getElementById('jsonToXmlInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter JSON data.', 'warning');
+                return;
+            }
+
+            showLoading('xmlLoadingSpinner', true);
+
+            try {
+                const response = await fetch('@Url.Action("ConvertToXML", "JsonTo")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `jsonInput=${encodeURIComponent(input)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('xmlOutput').textContent = result.result;
+                    document.getElementById('xmlResults').style.display = 'block';
+                    showAlert('JSON successfully converted to XML!', 'success');
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('An error occurred: ' + error.message, 'error');
+            } finally {
+                showLoading('xmlLoadingSpinner', false);
+            }
+        }
+
+        async function convertToYAML() {
+            const input = document.getElementById('jsonToYamlInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter JSON data.', 'warning');
+                return;
+            }
+
+            showLoading('yamlLoadingSpinner', true);
+
+            try {
+                const response = await fetch('@Url.Action("ConvertToYAML", "JsonTo")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `jsonInput=${encodeURIComponent(input)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('yamlOutput').textContent = result.result;
+                    document.getElementById('yamlResults').style.display = 'block';
+                    showAlert('JSON successfully converted to YAML!', 'success');
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('An error occurred: ' + error.message, 'error');
+            } finally {
+                showLoading('yamlLoadingSpinner', false);
+            }
+        }
+
+        async function convertToHTML() {
+            const input = document.getElementById('jsonToHtmlInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter JSON data.', 'warning');
+                return;
+            }
+
+            showLoading('htmlLoadingSpinner', true);
+
+            try {
+                const response = await fetch('@Url.Action("ConvertToHTML", "JsonTo")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `jsonInput=${encodeURIComponent(input)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('htmlOutput').textContent = result.result;
+                    document.getElementById('htmlPreview').innerHTML = result.result;
+                    document.getElementById('htmlResults').style.display = 'block';
+                    showAlert('JSON successfully converted to HTML Table!', 'success');
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('An error occurred: ' + error.message, 'error');
+            } finally {
+                showLoading('htmlLoadingSpinner', false);
+            }
+        }
+
+        async function formatJSON() {
+            const input = document.getElementById('formatJsonInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter JSON data.', 'warning');
+                return;
+            }
+
+            showLoading('formatLoadingSpinner', true);
+
+            try {
+                const response = await fetch('@Url.Action("FormatJSON", "JsonTo")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `jsonInput=${encodeURIComponent(input)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('formatOutput').textContent = result.result;
+                    document.getElementById('formatResults').style.display = 'block';
+                    showAlert('JSON successfully formatted!', 'success');
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('An error occurred: ' + error.message, 'error');
+            } finally {
+                showLoading('formatLoadingSpinner', false);
+            }
+        }
+    </script>
+}
