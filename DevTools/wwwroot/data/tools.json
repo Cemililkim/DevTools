@@ -57,6 +57,29 @@
           "description": "Generate unique IDs (v4, v1). Unique every time!"
         }
       ]
+    },
+    {
+      "name": "Development Tools",
+      "tools": [
+        {
+          "name": "Diff Checker",
+          "url": "/DiffChecker/Index",
+          "title": "Diff Checker",
+          "description": "Compare two texts and see their differences."
+        },
+        {
+          "name": "Lorem Ipsum Generator",
+          "url": "/LoremIpsumGenerator/Index",
+          "title": "Lorem Ipsum Generator",
+          "description": "Generate placeholder text easily."
+        },
+        {
+          "name": "GitIgnore Generator",
+          "url": "/GitIgnoreGenerator/Index",
+          "title": ".gitignore Generator",
+          "description": "Create custom .gitignore files for your projects."
+        }
+      ]
     }
   ]
 }
