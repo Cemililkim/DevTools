@@ -1,5 +1,5 @@
 ﻿:root {
-    --bg-primary: #0a0a0f;
+    --bg-primary: #11121a;
     --bg-secondary: #13141c;
     --bg-card: #1a1b26;
     --bg-header: #171822;
@@ -39,6 +39,74 @@ header {
     z-index: 1000;
 }
 
+.dropdown {
+
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    background-color: var(--bg-card);
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 0;
+    box-shadow: 0 8px 20px var(--shadow);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    z-index: 1050;
+}
+
+.dropdown:hover .dropdown-menu {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    padding: 0.55rem 1.2rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1), color 0.25s ease;
+    user-select: none;
+}
+
+    .dropdown-item i {
+        width: 20px;
+        margin-right: 12px;
+        color: var(--accent-primary);
+        transition: color 0.25s ease;
+    }
+
+    .dropdown-item:hover,
+    .dropdown-item:focus {
+        background-color: var(--bg-secondary);
+        color: var(--accent-secondary);
+        outline: none;
+    }
+
+        .dropdown-item:hover i,
+        .dropdown-item:focus i {
+            color: var(--accent-secondary);
+        }
+
+.dropdown-menu::before {
+    content: "";
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 6px solid var(--bg-card);
+    filter: drop-shadow(0 1px 1px var(--shadow));
+}
+
 .navbar {
     background-color: var(--bg-secondary);
     border-radius: 10px;
@@ -66,32 +134,6 @@ header {
     transition: color 0.3s ease, transform 0.2s ease;
     position: relative;
 }
-
-    .nav-link:hover {
-        color: var(--accent-secondary);
-        transform: translateY(-2px);
-    }
-
-    .nav-link.active {
-        color: var(--accent-primary);
-    }
-
-    .nav-link::after {
-        content: '';
-        position: absolute;
-        bottom: -5px;
-        left: 50%;
-        width: 0;
-        height: 2px;
-        background: linear-gradient(120deg, var(--accent-primary), var(--accent-secondary));
-        transition: all 0.3s ease;
-        transform: translateX(-50%);
-    }
-
-    .nav-link:hover::after,
-    .nav-link.active::after {
-        width: 100%;
-    }
 
 section {
     background-color: var(--bg-secondary);

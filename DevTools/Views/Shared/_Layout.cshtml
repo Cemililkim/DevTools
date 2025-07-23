@@ -11,23 +11,52 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm mb-3">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-3">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index"><i class="bi bi-braces"></i> DevTools</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand fw-bold" asp-controller="Home" asp-action="Index">
+                    <i class="bi bi-braces"></i> DevTools
+                </a>
+
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-semibold" href="#" id="formatDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Format Tools
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="formatDropdown">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="XmlTo" asp-action="Index">
+                                        <i class="bi bi-code-slash me-2"></i> XML Converter
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="CsvTo" asp-action="Index">
+                                        <i class="bi bi-filetype-csv"></i> CSV Converter
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="JsonTo" asp-action="Index">
+                                        <i class="bi bi-filetype-json me-2"></i> JSON Formatter
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="YamlTo" asp-action="Index">
+                                        <i class="bi bi-diagram-3 me-2"></i> YAML Tools
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
     </header>
+
 
     <div class="container">
         <main role="main" class="pb-3">
