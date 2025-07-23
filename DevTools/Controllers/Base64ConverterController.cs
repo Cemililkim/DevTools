@@ -4,7 +4,7 @@ using System.Text;
 
 namespace DevTools.Controllers
 {
-    public class Base64Controller : Controller
+    public class Base64ConverterController : Controller
     {
         [HttpPost]
         public IActionResult Encode(string input)

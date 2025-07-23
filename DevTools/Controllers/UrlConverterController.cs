@@ -4,7 +4,7 @@ using System.Net;
 
 namespace DevTools.Controllers
 {
-    public class UrlController : Controller
+    public class UrlConverterController : Controller
     {
         public IActionResult Index()
         {

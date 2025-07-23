@@ -1,0 +1,217 @@
+﻿@{
+    ViewData["Title"] = "Hash Converter";
+}
+<div class="container">
+        <div class="tool-header">
+            <h1 class="tool-title">Hash Generator</h1>
+            <p class="tool-description">
+                Generate MD5, SHA1, SHA256, and SHA512 hashes from your text input.
+            </p>
+        </div>
+
+        <div class="tab-container">
+            <div class="tab-nav">
+                <button class="tab-button active" data-tab="hash-md5">MD5</button>
+                <button class="tab-button" data-tab="hash-sha1">SHA1</button>
+                <button class="tab-button" data-tab="hash-sha256">SHA256</button>
+                <button class="tab-button" data-tab="hash-sha512">SHA512</button>
+            </div>
+
+            <!-- MD5 Tab -->
+            <div class="tab-content" id="hash-md5">
+                <div class="form-group">
+                    <label class="form-label">Text to Hash (MD5):</label>
+                    <div class="code-editor-container">
+                        <div class="code-editor-header">
+                            <span>Input</span>
+                            <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('md5Input')">Clear</button>
+                        </div>
+                        <textarea class="code-editor" id="md5Input" placeholder="Enter text to generate MD5 hash..."></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" onclick="generateHash('md5')">
+                        <span class="loading-spinner" id="md5Spinner" style="display: none;"></span>
+                        Generate MD5
+                    </button>
+                </div>
+                <div class="results-container" id="md5Results" style="display: none;">
+                    <div class="results-header">
+                        <span>Generated MD5 Hash</span>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('md5Output')">Copy</button>
+                    </div>
+                    <div class="results-content">
+                        <pre class="code-editor" id="md5Output"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SHA1 Tab -->
+            <div class="tab-content" id="hash-sha1" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Text to Hash (SHA1):</label>
+                    <div class="code-editor-container">
+                        <div class="code-editor-header">
+                            <span>Input</span>
+                            <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('sha1Input')">Clear</button>
+                        </div>
+                        <textarea class="code-editor" id="sha1Input" placeholder="Enter text to generate SHA1 hash..."></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" onclick="generateHash('sha1')">
+                        <span class="loading-spinner" id="sha1Spinner" style="display: none;"></span>
+                        Generate SHA1
+                    </button>
+                </div>
+                <div class="results-container" id="sha1Results" style="display: none;">
+                    <div class="results-header">
+                        <span>Generated SHA1 Hash</span>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('sha1Output')">Copy</button>
+                    </div>
+                    <div class="results-content">
+                        <pre class="code-editor" id="sha1Output"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SHA256 Tab -->
+            <div class="tab-content" id="hash-sha256" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Text to Hash (SHA256):</label>
+                    <div class="code-editor-container">
+                        <div class="code-editor-header">
+                            <span>Input</span>
+                            <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('sha256Input')">Clear</button>
+                        </div>
+                        <textarea class="code-editor" id="sha256Input" placeholder="Enter text to generate SHA256 hash..."></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" onclick="generateHash('sha256')">
+                        <span class="loading-spinner" id="sha256Spinner" style="display: none;"></span>
+                        Generate SHA256
+                    </button>
+                </div>
+                <div class="results-container" id="sha256Results" style="display: none;">
+                    <div class="results-header">
+                        <span>Generated SHA256 Hash</span>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('sha256Output')">Copy</button>
+                    </div>
+                    <div class="results-content">
+                        <pre class="code-editor" id="sha256Output"></pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SHA512 Tab -->
+            <div class="tab-content" id="hash-sha512" style="display: none;">
+                <div class="form-group">
+                    <label class="form-label">Text to Hash (SHA512):</label>
+                    <div class="code-editor-container">
+                        <div class="code-editor-header">
+                            <span>Input</span>
+                            <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('sha512Input')">Clear</button>
+                        </div>
+                        <textarea class="code-editor" id="sha512Input" placeholder="Enter text to generate SHA512 hash..."></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="button" class="btn btn-primary" onclick="generateHash('sha512')">
+                        <span class="loading-spinner" id="sha512Spinner" style="display: none;"></span>
+                        Generate SHA512
+                    </button>
+                </div>
+                <div class="results-container" id="sha512Results" style="display: none;">
+                    <div class="results-header">
+                        <span>Generated SHA512 Hash</span>
+                        <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('sha512Output')">Copy</button>
+                    </div>
+                    <div class="results-content">
+                        <pre class="code-editor" id="sha512Output"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="alertContainer"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+<script>
+    document.querySelectorAll('.tab-button').forEach(button => {
+        button.addEventListener('click', function () {
+            const tabId = this.getAttribute('data-tab');
+            document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+            this.classList.add('active');
+            document.getElementById(tabId).style.display = 'block';
+        });
+    });
+
+    function showLoading(id, show) {
+        document.getElementById(id).style.display = show ? 'inline-block' : 'none';
+    }
+
+    function showAlert(message, type = 'error') {
+        const alertContainer = document.getElementById('alertContainer');
+        const alert = document.createElement('div');
+        alert.className = `alert alert-${type}`;
+        alert.textContent = message;
+        alertContainer.appendChild(alert);
+        setTimeout(() => alert.remove(), 4000);
+    }
+
+    function clearInput(id) {
+        document.getElementById(id).value = '';
+    }
+
+    async function copyToClipboard(id) {
+        const element = document.getElementById(id);
+        try {
+            await navigator.clipboard.writeText(element.textContent);
+            showAlert('Copied to clipboard!', 'success');
+        } catch {
+            showAlert('Failed to copy!', 'error');
+        }
+    }
+
+    async function generateHash(algorithm) {
+        const input = document.getElementById(`${algorithm}Input`).value;
+        if (!input.trim()) {
+            showAlert('Please enter text to hash.', 'warning');
+            return;
+        }
+
+        showLoading(`${algorithm}Spinner`, true);
+
+        // Simulate API call delay
+        setTimeout(() => {
+            try {
+                let hash;
+                switch(algorithm) {
+                    case 'md5':
+                        hash = CryptoJS.MD5(input).toString();
+                        break;
+                    case 'sha1':
+                        hash = CryptoJS.SHA1(input).toString();
+                        break;
+                    case 'sha256':
+                        hash = CryptoJS.SHA256(input).toString();
+                        break;
+                    case 'sha512':
+                        hash = CryptoJS.SHA512(input).toString();
+                        break;
+                }
+
+                document.getElementById(`${algorithm}Output`).textContent = hash;
+                document.getElementById(`${algorithm}Results`).style.display = 'block';
+                showAlert(`${algorithm.toUpperCase()} hash generated successfully!`, 'success');
+            } catch (error) {
+                showAlert('Error generating hash: ' + error.message, 'error');
+            }
+
+            showLoading(`${algorithm}Spinner`, false);
+        }, 300);
+    }
+</script>
