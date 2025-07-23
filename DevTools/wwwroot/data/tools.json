@@ -80,6 +80,23 @@
           "description": "Create custom .gitignore files for your projects."
         }
       ]
+    },
+    {
+      "name": "UI Tools",
+      "tools": [
+        {
+          "name": "Color Palette Generator",
+          "url": "/ColorPaletteGenerator/Index",
+          "title": "Color Palette Generator",
+          "description": "Generate amazing color palettes easily."
+        },
+        {
+          "name": "Color Converter",
+          "url": "/ColorConverter/Index",
+          "title": "Color Converter",
+          "description": "Transform colors easily and clearly!"
+        }
+      ]
     }
   ]
 }

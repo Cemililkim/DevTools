@@ -247,6 +247,9 @@ section {
     .form-control::placeholder {
         color: var(--text-secondary);
     }
+    .form-control[readonly] {
+        background: var(--bg-card);
+    }
 
 /* Table */
 table {

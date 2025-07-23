@@ -1,0 +1,203 @@
+﻿@{
+    ViewData["Title"] = "Color Palette Generator";
+}
+
+<div class="container">
+    <div class="tool-header">
+        <h1 class="tool-title">Color Palette Generator</h1>
+        <p class="tool-description">Add, remove, lock colors. Min 2, max 10 colors. Change random colors except locked ones!</p>
+    </div>
+
+    <div id="palette" class="feature-grid">
+        <!-- Color cards inserted by JS -->
+    </div>
+
+    <div class="form-group" style="text-align:center; margin-top: 1rem; display: flex; justify-content: center; gap: 12px;">
+        <button class="btn btn-primary" id="addColorBtn">+ Add Color</button>
+        <button class="btn btn-secondary" id="randomizeBtn">Generate Random Colors</button>
+    </div>
+
+    <div id="alertContainer"></div>
+</div>
+
+@section Scripts {
+    <script>
+        // Start with 2 colors
+        let colors = [
+            { hex: '#7c3aed', locked: false },
+            { hex: '#06ffa5', locked: false }
+        ];
+
+        const paletteDiv = document.getElementById('palette');
+        const alertContainer = document.getElementById('alertContainer');
+        const addColorBtn = document.getElementById('addColorBtn');
+        const randomizeBtn = document.getElementById('randomizeBtn');
+
+        function showAlert(message, type = 'danger') {
+            alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => { alertContainer.innerHTML = ''; }, 3000);
+        }
+
+        // Generate random hex color
+        function getRandomHexColor() {
+            let letters = '0123456789ABCDEF';
+            let color = '#';
+            for(let i=0; i<6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        function renderPalette() {
+            paletteDiv.innerHTML = '';
+            colors.forEach((colorObj, index) => {
+                const colorCard = document.createElement('div');
+                colorCard.className = 'feature-card';
+                colorCard.style.backgroundColor = colorObj.hex;
+                colorCard.style.position = 'relative';
+                colorCard.style.color = getContrastYIQ(colorObj.hex);
+                colorCard.style.userSelect = 'none';
+
+                // Color hex input
+                const colorCode = document.createElement('input');
+                colorCode.type = 'text';
+                colorCode.value = colorObj.hex.toUpperCase();
+                colorCode.className = 'form-control';
+                colorCode.style.marginBottom = '0.5rem';
+                colorCode.style.textAlign = 'center';
+                colorCode.style.fontWeight = '700';
+                colorCode.style.color = getContrastYIQ(colorObj.hex);
+                colorCode.style.background = 'transparent';
+                colorCode.style.border = 'none';
+                colorCode.style.cursor = colorObj.locked ? 'not-allowed' : 'pointer';
+                colorCode.readOnly = colorObj.locked;
+
+                // Update hex if changed and not locked
+                colorCode.addEventListener('change', (e) => {
+                    if(colorObj.locked) {
+                        showAlert("This color is locked. Unlock to edit.", "warning");
+                        e.target.value = colorObj.hex.toUpperCase();
+                        return;
+                    }
+                    let val = e.target.value.trim();
+                    if(/^#([0-9A-Fa-f]{6})$/.test(val)) {
+                        colors[index].hex = val.toUpperCase();
+                        renderPalette();
+                    } else {
+                        showAlert('Color code must be 6-digit hex! Example: #FF00AA');
+                        e.target.value = colors[index].hex;
+                    }
+                });
+
+                colorCard.appendChild(colorCode);
+
+                // Color picker input
+                const colorPicker = document.createElement('input');
+                colorPicker.type = 'color';
+                colorPicker.value = colorObj.hex;
+                colorPicker.style.width = '100%';
+                colorPicker.style.height = '40px';
+                colorPicker.style.borderRadius = '8px';
+                colorPicker.style.border = 'none';
+                colorPicker.style.cursor = colorObj.locked ? 'not-allowed' : 'pointer';
+                colorPicker.disabled = colorObj.locked;
+
+                colorPicker.addEventListener('input', (e) => {
+                    if(colorObj.locked) {
+                        showAlert("This color is locked. Unlock to change.", "warning");
+                        e.target.value = colorObj.hex;
+                        return;
+                    }
+                    colors[index].hex = e.target.value.toUpperCase();
+                    renderPalette();
+                });
+
+                colorCard.appendChild(colorPicker);
+
+                // Lock checkbox
+                const lockLabel = document.createElement('label');
+                lockLabel.style.position = 'absolute';
+                lockLabel.style.top = '8px';
+                lockLabel.style.left = '8px';
+                lockLabel.style.color = getContrastYIQ(colorObj.hex);
+                lockLabel.style.userSelect = 'none';
+                lockLabel.style.cursor = 'pointer';
+                lockLabel.title = colorObj.locked ? "Unlock color" : "Lock color";
+
+                const lockCheckbox = document.createElement('input');
+                lockCheckbox.type = 'checkbox';
+                lockCheckbox.checked = colorObj.locked;
+                lockCheckbox.style.marginRight = '6px';
+
+                lockCheckbox.addEventListener('change', () => {
+                    colors[index].locked = lockCheckbox.checked;
+                    renderPalette();
+                });
+
+                lockLabel.appendChild(lockCheckbox);
+                lockLabel.appendChild(document.createTextNode('Lock'));
+                colorCard.appendChild(lockLabel);
+
+                // Delete button if more than 2 colors
+                if(colors.length > 2) {
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.textContent = 'Delete';
+                    deleteBtn.className = 'btn btn-danger';
+                    deleteBtn.style.position = 'absolute';
+                    deleteBtn.style.top = '8px';
+                    deleteBtn.style.right = '8px';
+                    deleteBtn.style.padding = '4px 10px';
+                    deleteBtn.style.fontSize = '12px';
+
+                    deleteBtn.addEventListener('click', () => {
+                        colors.splice(index, 1);
+                        renderPalette();
+                    });
+
+                    colorCard.appendChild(deleteBtn);
+                }
+
+                paletteDiv.appendChild(colorCard);
+            });
+
+            // Disable add button at 10 colors max
+            if(colors.length >= 10) {
+                addColorBtn.disabled = true;
+                addColorBtn.style.opacity = 0.5;
+                addColorBtn.style.cursor = 'not-allowed';
+                showAlert('You reached the maximum of 10 colors.', 'warning');
+            } else {
+                addColorBtn.disabled = false;
+                addColorBtn.style.opacity = 1;
+                addColorBtn.style.cursor = 'pointer';
+            }
+        }
+
+        function getContrastYIQ(hexcolor){
+            hexcolor = hexcolor.replace('#', '');
+            let r = parseInt(hexcolor.substr(0,2),16);
+            let g = parseInt(hexcolor.substr(2,2),16);
+            let b = parseInt(hexcolor.substr(4,2),16);
+            let yiq = ((r*299)+(g*587)+(b*114))/1000;
+            return (yiq >= 128) ? '#111' : '#eee';
+        }
+
+        addColorBtn.addEventListener('click', () => {
+            if(colors.length < 10) {
+                colors.push({ hex: getRandomHexColor(), locked: false });
+                renderPalette();
+            } else {
+                showAlert('Maximum number of colors reached!', 'warning');
+            }
+        });
+
+        randomizeBtn.addEventListener('click', () => {
+            colors = colors.map(c => c.locked ? c : { hex: getRandomHexColor(), locked: false });
+            renderPalette();
+        });
+
+        // Initial render
+        renderPalette();
+
+    </script>
+}

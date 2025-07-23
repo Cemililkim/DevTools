@@ -87,7 +87,7 @@
                         <!-- Development Tools -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle fw-semibold" href="#" id="developmentDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Development  Tools
+                                Development Tools
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="developmentDropdown">
                                 <li>
@@ -103,6 +103,25 @@
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" asp-controller="GitIgnoreGenerator" asp-action="Index">
                                         <i class="bi bi-git"></i> .gitignore Generator
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- UI Tools -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-semibold" href="#" id="uiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                UI Tools
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="uiDropdown">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="ColorPaletteGenerator" asp-action="Index">
+                                        <i class="bi bi-palette-fill"></i> Color Palette Generator
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="ColorConverter" asp-action="Index">
+                                        <i class="bi bi-eyedropper"></i> Color Converter
                                     </a>
                                 </li>
                             </ul>
