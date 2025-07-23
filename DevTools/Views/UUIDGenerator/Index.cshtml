@@ -1,0 +1,66 @@
+﻿@{
+    ViewData["Title"] = "UUID/GUID Generator";
+}
+
+<div class="container">
+    <div class="tool-header">
+        <h1 class="tool-title">UUID/GUID Generator</h1>
+        <p class="tool-description">Generate UUIDs in different versions (v1 and v4). Simple, fast, and copyable!</p>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Select UUID Version:</label>
+        <select id="uuidVersion" class="form-control">
+            <option value="v4">Version 4 (Random)</option>
+            <option value="v1">Version 1 (Time-based)</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <button class="btn btn-primary" onclick="generateUUID()">Generate UUID</button>
+    </div>
+
+    <div id="uuidResultContainer" style="display:none;">
+        <label class="form-label">Generated UUID:</label>
+        <pre id="uuidResult" class="p-3" style="border: 1px solid transparent; border-image: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); border-image-slice: 1; font-size: 1.2em; user-select: all;"></pre>
+        <button class="btn btn-secondary btn-sm mt-2 mb-3" onclick="copyUUID()">Copy</button>
+    </div>
+
+    <div id="alertContainer"></div>
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
+
+    <script>
+        function showAlert(message, type = 'info') {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => { alertContainer.innerHTML = ''; }, 3000);
+        }
+
+        function generateUUID() {
+            const version = document.getElementById('uuidVersion').value;
+            let id = '';
+
+            if (version === 'v1') {
+                id = uuid.v1(); 
+            } else {
+
+                id = uuid.v4();
+            }
+
+            document.getElementById('uuidResult').textContent = id;
+            document.getElementById('uuidResultContainer').style.display = 'block';
+        }
+
+        function copyUUID() {
+            const uuid = document.getElementById('uuidResult').textContent;
+            navigator.clipboard.writeText(uuid).then(() => {
+                showAlert('UUID copied to clipboard!', 'success');
+            }).catch(() => {
+                showAlert('Failed to copy UUID.', 'danger');
+            });
+        }
+    </script>
+}
