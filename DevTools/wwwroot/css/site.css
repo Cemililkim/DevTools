@@ -27,7 +27,7 @@ body {
 .container {
     justify-content: center;
     align-items: center;
-    display: flex;
+    margin: 50px;
 }
 
 header {
@@ -159,13 +159,6 @@ section {
     font-size: 15pt;
     text-align: center;
     margin-bottom: 2rem;
-}
-
-/* Tool Pages Styles */
-.tool-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
 }
 
 .tool-header {
