@@ -241,7 +241,8 @@ section {
     .form-control:focus {
         outline: none;
         border-color: var(--accent-primary);
-        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        background: var(--bg-card);
+        color: var(--text-primary);
     }
 
     .form-control::placeholder {
@@ -286,7 +287,6 @@ table {
 .btn {
     padding: 12px 24px;
     border: none;
-    border-radius: 8px;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
@@ -310,7 +310,9 @@ table {
 .btn-secondary {
     background: var(--bg-card);
     color: var(--text-primary);
-    border: 1px solid var(--border-color);
+    border: 1px solid transparent;
+    border-image: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+    border-image-slice: 1;
 }
 
     .btn-secondary:hover {

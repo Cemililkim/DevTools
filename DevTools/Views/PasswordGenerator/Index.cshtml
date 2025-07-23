@@ -1,0 +1,142 @@
+﻿@{
+    ViewData["Title"] = "Password Generator";
+}
+
+<div class="container">
+    <div class="tool-header">
+        <h1 class="tool-title">Password Generator</h1>
+        <p class="tool-description">Choose length, special characters, numbers and letters to generate your password!</p>
+    </div>
+
+    <div class="form-group">
+        <label for="lengthInput" class="form-label">Password Length (min 4, max 128):</label>
+        <input type="number" id="lengthInput" class="form-control" min="4" max="128" value="12" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">How many special characters?</label>
+        <input type="number" id="specialCharCount" class="form-control" min="0" max="20" value="2" />
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">How many numbers?</label>
+        <input type="number" id="numberCount" class="form-control" min="0" max="20" value="3" />
+    </div>
+
+    <div class="form-group form-check">
+        <input type="checkbox" id="includeUppercase" class="form-check-input" checked />
+        <label for="includeUppercase" class="form-check-label">Include uppercase letters?</label>
+    </div>
+
+    <div class="form-group form-check">
+        <input type="checkbox" id="includeLowercase" class="form-check-input" checked />
+        <label for="includeLowercase" class="form-check-label">Include lowercase letters?</label>
+    </div>
+
+    <div class="form-group">
+        <button class="btn btn-primary" onclick="generatePassword()">Generate Password</button>
+    </div>
+
+    <div id="passwordResultContainer" style="display:none;">
+        <label class="form-label">Generated Password:</label>
+        <pre id="passwordResult" class="p-3" style="border: 1px solid transparent; border-image: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); border-image-slice: 1; user-select: all; font-size: 1.2em;"></pre>
+        <button class="btn btn-secondary btn-sm mt-2 mb-3" onclick="copyPassword()">Copy</button>
+    </div>
+
+    <div id="alertContainer"></div>
+</div>
+
+@section Scripts {
+    <script>
+        function showAlert(message, type = 'danger') {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => { alertContainer.innerHTML = ''; }, 3500);
+        }
+
+        function shuffleString(str) {
+            const arr = str.split('');
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr.join('');
+        }
+
+        function generatePassword() {
+            const length = parseInt(document.getElementById('lengthInput').value);
+            const specialCount = parseInt(document.getElementById('specialCharCount').value);
+            const numberCount = parseInt(document.getElementById('numberCount').value);
+            const includeUppercase = document.getElementById('includeUppercase').checked;
+            const includeLowercase = document.getElementById('includeLowercase').checked;
+
+            if (isNaN(length) || length < 4 || length > 128) {
+                showAlert('Password length must be between 4 and 128!');
+                return;
+            }
+
+            if (specialCount < 0 || specialCount > length) {
+                showAlert('Invalid number of special characters!');
+                return;
+            }
+
+            if (numberCount < 0 || numberCount > length) {
+                showAlert('Invalid number of digits!');
+                return;
+            }
+
+            if (!includeUppercase && !includeLowercase && specialCount === 0 && numberCount === 0) {
+                showAlert('You must select at least one character type!');
+                return;
+            }
+
+            if (specialCount + numberCount > length) {
+                showAlert('Sum of special characters and digits cannot exceed total length!');
+                return;
+            }
+
+            const specialChars = "!@@#$%^&*()-_=+[]{}|;:,.<>?";
+            const numbers = "0123456789";
+            const uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const lowercase = "abcdefghijklmnopqrstuvwxyz";
+
+            let passwordChars = "";
+
+            for (let i = 0; i < specialCount; i++) {
+                passwordChars += specialChars.charAt(Math.floor(Math.random() * specialChars.length));
+            }
+
+            for (let i = 0; i < numberCount; i++) {
+                passwordChars += numbers.charAt(Math.floor(Math.random() * numbers.length));
+            }
+
+            const remainingLength = length - passwordChars.length;
+            let letters = "";
+            if (includeUppercase) letters += uppercase;
+            if (includeLowercase) letters += lowercase;
+
+            if (letters.length === 0 && remainingLength > 0) {
+                showAlert("You didn't include letters but you're asking for more length!");
+                return;
+            }
+
+            for (let i = 0; i < remainingLength; i++) {
+                passwordChars += letters.charAt(Math.floor(Math.random() * letters.length));
+            }
+
+            const finalPassword = shuffleString(passwordChars);
+
+            document.getElementById('passwordResult').textContent = finalPassword;
+            document.getElementById('passwordResultContainer').style.display = 'block';
+        }
+
+        function copyPassword() {
+            const password = document.getElementById('passwordResult').textContent;
+            navigator.clipboard.writeText(password).then(() => {
+                showAlert('Password copied successfully!', 'success');
+            }).catch(() => {
+                showAlert('Failed to copy the password!', 'warning');
+            });
+        }
+    </script>
+}
