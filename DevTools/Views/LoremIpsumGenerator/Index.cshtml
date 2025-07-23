@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "Lorem Ipsum Generator";
+}
+
+<div class="container">
+    <div class="tool-header">
+        <h1 class="tool-title">Lorem Ipsum Generator</h1>
+        <p class="tool-description">Generate custom lorem ipsum text with desired paragraphs and sentences!</p>
+    </div>
+
+    <div class="form-group">
+        <label for="paragraphCount" class="form-label">How many paragraphs?</label>
+        <input type="number" id="paragraphCount" class="form-control" min="1" max="20" value="3" />
+    </div>
+
+    <div class="form-group">
+        <label for="sentencePerParagraph" class="form-label">Sentences per paragraph?</label>
+        <input type="number" id="sentencePerParagraph" class="form-control" min="1" max="20" value="5" />
+    </div>
+
+    <div class="form-group">
+        <button class="btn btn-primary" onclick="generateLorem()">Generate Text</button>
+    </div>
+
+    <div id="loremResultContainer" style="display:none;">
+        <label class="form-label">Generated Text:</label>
+        <pre id="loremResult" class="p-3" style="border: 1px solid transparent; border-image: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); border-image-slice: 1; user-select: all; font-size: 1.1em;"></pre>
+        <button class="btn btn-secondary btn-sm mt-2 mb-3" onclick="copyLorem()">Copy</button>
+    </div>
+
+    <div id="alertContainer"></div>
+</div>
+
+@section Scripts {
+    <script>
+        const loremWords = [
+            "lorem", "ipsum", "dolor", "sit", "amet", "consectetur", "adipiscing", "elit",
+            "sed", "do", "eiusmod", "tempor", "incididunt", "ut", "labore", "et", "dolore",
+            "magna", "aliqua", "ut", "enim", "ad", "minim", "veniam", "quis", "nostrud",
+            "exercitation", "ullamco", "laboris", "nisi", "ut", "aliquip", "ex", "ea",
+            "commodo", "consequat", "duis", "aute", "irure", "dolor", "in", "reprehenderit",
+            "voluptate", "velit", "esse", "cillum", "dolore", "eu", "fugiat", "nulla", "pariatur"
+        ];
+
+        function showAlert(message, type = 'danger') {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => { alertContainer.innerHTML = ''; }, 3500);
+        }
+
+        function getRandomWord() {
+            return loremWords[Math.floor(Math.random() * loremWords.length)];
+        }
+
+        function generateSentence(wordCount = 8 + Math.floor(Math.random() * 8)) {
+            let sentence = [];
+            for (let i = 0; i < wordCount; i++) {
+                sentence.push(getRandomWord());
+            }
+            let s = sentence.join(' ');
+            return s.charAt(0).toUpperCase() + s.slice(1) + '.';
+        }
+
+        function generateLorem() {
+            const paragraphCount = parseInt(document.getElementById('paragraphCount').value);
+            const sentenceCount = parseInt(document.getElementById('sentencePerParagraph').value);
+
+            if (isNaN(paragraphCount) || paragraphCount < 1 || paragraphCount > 20) {
+                showAlert("Paragraph count must be between 1 and 20!");
+                return;
+            }
+
+            if (isNaN(sentenceCount) || sentenceCount < 1 || sentenceCount > 20) {
+                showAlert("Sentence count must be between 1 and 20!");
+                return;
+            }
+
+            let result = "";
+
+            for (let i = 0; i < paragraphCount; i++) {
+                let paragraph = [];
+                for (let j = 0; j < sentenceCount; j++) {
+                    paragraph.push(generateSentence());
+                }
+                result += paragraph.join(" ") + "\n\n";
+            }
+
+            document.getElementById('loremResult').textContent = result.trim();
+            document.getElementById('loremResultContainer').style.display = 'block';
+        }
+
+        function copyLorem() {
+            const text = document.getElementById('loremResult').textContent;
+            navigator.clipboard.writeText(text).then(() => {
+                showAlert('Text copied successfully!', 'success');
+            }).catch(() => {
+                showAlert('Copy failed!', 'warning');
+            });
+        }
+    </script>
+}
