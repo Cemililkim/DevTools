@@ -1,0 +1,94 @@
+﻿@{
+    ViewData["Title"] = "GitIgnore Generator";
+}
+
+<div class="container mt-4">
+    <div class="tool-header">
+        <h1 class="tool-title">.gitignore Generator</h1>
+        <p class="tool-description">Select your technologies and generate a custom .gitignore file.</p>
+    </div>
+
+    <div class="form-group mb-3">
+        <label for="techSelect" class="form-label">Select templates (multiple):</label>
+        <select id="techSelect" multiple class="form-control" style="height: 200px;"></select>
+    </div>
+
+    <button class="btn btn-primary mb-3" id="generateBtn">Generate</button>
+
+    <div id="resultContainer" style="display:none;">
+        <label class="form-label">Generated .gitignore content:</label>
+        <pre id="gitignoreResult" style="padding: 10px; border: 1px solid transparent; border-image: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); border-image-slice: 1; font-size: 1.2em; user-select: all;"></pre>
+        <button class="btn btn-secondary btn-sm mt-2" id="copyBtn">Copy to Clipboard</button>
+    </div>
+
+    <div id="alertContainer" style="margin-top: 1rem;"></div>
+</div>
+
+@section Scripts {
+    <script>
+        async function fetchTemplates() {
+            try {
+                const res = await fetch('@Url.Action("GetTemplates")');
+                if (!res.ok) throw new Error("Failed to load templates");
+                const templates = await res.json();
+
+                const select = document.getElementById('techSelect');
+                templates.forEach(t => {
+                    const option = document.createElement('option');
+                    option.value = t;
+                    option.textContent = t;
+                    select.appendChild(option);
+                });
+            } catch (e) {
+                showAlert(e.message);
+            }
+        }
+
+        function showAlert(message, type = 'danger') {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => { alertContainer.innerHTML = ''; }, 4000);
+        }
+
+        async function generateGitIgnore() {
+            const select = document.getElementById('techSelect');
+            const selected = Array.from(select.selectedOptions).map(o => o.value);
+            if (selected.length === 0) {
+                showAlert("Please select at least one template.");
+                return;
+            }
+
+            let combined = '';
+            for (const tmpl of selected) {
+                try {
+                    const res = await fetch(`@Url.Action("GetTemplateContent")?name=${encodeURIComponent(tmpl)}`);
+                    if (!res.ok) {
+                        showAlert(`Could not fetch template: ${tmpl}`, 'warning');
+                        continue;
+                    }
+                    const text = await res.text();
+                    combined += `# --- ${tmpl} ---\n${text}\n\n`;
+                } catch (e) {
+                    showAlert(e.message);
+                }
+            }
+
+            if (combined.length > 0) {
+                document.getElementById('gitignoreResult').textContent = combined.trim();
+                document.getElementById('resultContainer').style.display = 'block';
+            }
+        }
+
+        function copyToClipboard() {
+            const text = document.getElementById('gitignoreResult').textContent;
+            navigator.clipboard.writeText(text)
+                .then(() => showAlert("Copied to clipboard!", 'success'))
+                .catch(() => showAlert("Failed to copy!", 'warning'));
+        }
+
+        document.getElementById('generateBtn').addEventListener('click', generateGitIgnore);
+        document.getElementById('copyBtn').addEventListener('click', copyToClipboard);
+
+        fetchTemplates();
+    </script>
+}
