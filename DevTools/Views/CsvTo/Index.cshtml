@@ -1,0 +1,396 @@
+﻿@{
+    ViewData["Title"] = "CSV Converter";
+}
+
+<div class="tool-container">
+    <div class="tool-header">
+        <h1 class="tool-title">CSV Converter</h1>
+        <p class="tool-description">
+            Convert your CSV data to different formats like JSON, XML, YAML, and HTML.
+        </p>
+    </div>
+
+    <div class="tab-container">
+        <div class="tab-nav">
+            <button class="tab-button active" data-tab="csv-to-json">CSV → JSON</button>
+            <button class="tab-button" data-tab="csv-to-xml">CSV → XML</button>
+            <button class="tab-button" data-tab="csv-to-yaml">CSV → YAML</button>
+            <button class="tab-button" data-tab="csv-to-html">CSV → HTML Table</button>
+            <button class="tab-button" data-tab="format-csv">Format CSV</button>
+        </div>
+
+        <!-- CSV to JSON Tab -->
+        <div class="tab-content" id="csv-to-json">
+            <div class="form-group">
+                <label class="form-label">CSV Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>CSV Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('csvToJsonInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="csvToJsonInput" placeholder="name,age,city&#10;John,25,New York&#10;Jane,30,London"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="convertToJSON()">
+                    <span class="loading-spinner" id="jsonLoadingSpinner" style="display: none;"></span>
+                    Convert to JSON
+                </button>
+            </div>
+            <div class="results-container" id="jsonResults" style="display: none;">
+                <div class="results-header">
+                    <span>JSON Result</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('jsonOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="jsonOutput"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- CSV to XML Tab -->
+        <div class="tab-content" id="csv-to-xml" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">CSV Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>CSV Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('csvToXmlInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="csvToXmlInput" placeholder="product,price,stock&#10;Laptop,999.99,15&#10;Mouse,29.99,50"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="convertToXML()">
+                    <span class="loading-spinner" id="xmlLoadingSpinner" style="display: none;"></span>
+                    Convert to XML
+                </button>
+            </div>
+            <div class="results-container" id="xmlResults" style="display: none;">
+                <div class="results-header">
+                    <span>XML Result</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('xmlOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="xmlOutput"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- CSV to YAML Tab -->
+        <div class="tab-content" id="csv-to-yaml" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">CSV Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>CSV Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('csvToYamlInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="csvToYamlInput" placeholder="server,port,ssl&#10;localhost,8080,true&#10;remote,443,true"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="convertToYAML()">
+                    <span class="loading-spinner" id="yamlLoadingSpinner" style="display: none;"></span>
+                    Convert to YAML
+                </button>
+            </div>
+            <div class="results-container" id="yamlResults" style="display: none;">
+                <div class="results-header">
+                    <span>YAML Result</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('yamlOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="yamlOutput"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- CSV to HTML Table Tab -->
+        <div class="tab-content" id="csv-to-html" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">CSV Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>CSV Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('csvToHtmlInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="csvToHtmlInput" placeholder="name,department,salary&#10;John Doe,Engineering,75000&#10;Jane Smith,Marketing,65000"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="convertToHTML()">
+                    <span class="loading-spinner" id="htmlLoadingSpinner" style="display: none;"></span>
+                    Convert to HTML Table
+                </button>
+            </div>
+            <div class="results-container" id="htmlResults" style="display: none;">
+                <div class="results-header">
+                    <span>HTML Table Result</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('htmlOutput')">Copy HTML</button>
+                </div>
+                <div class="results-content">
+                    <div class="html-preview" id="htmlPreview"></div>
+                    <details style="margin-top: 10px;">
+                        <summary style="cursor: pointer; font-weight: bold;">View HTML Source</summary>
+                        <pre class="code-editor" id="htmlOutput" style="margin-top: 10px;"></pre>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+        <!-- Format CSV Tab -->
+        <div class="tab-content" id="format-csv" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">CSV Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>CSV Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('formatCsvInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="formatCsvInput" placeholder="  name  , age,   city  &#10; John , 25,  New York &#10; Jane,30, London   "></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="formatCSV()">
+                    <span class="loading-spinner" id="formatLoadingSpinner" style="display: none;"></span>
+                    Format CSV
+                </button>
+            </div>
+            <div class="results-container" id="formatResults" style="display: none;">
+                <div class="results-header">
+                    <span>Formatted CSV</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('formatOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="formatOutput"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+</div>
+
+@section Scripts {
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+
+                // Remove active class from all buttons and content
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+
+                // Add active class to clicked button and show content
+                this.classList.add('active');
+                document.getElementById(tabId).style.display = 'block';
+            });
+        });
+
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `<span>${message}</span>`;
+
+            alertContainer.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        function showLoading(spinnerId, show) {
+            const spinner = document.getElementById(spinnerId);
+            spinner.style.display = show ? 'inline-block' : 'none';
+        }
+
+        function clearInput(inputId) {
+            document.getElementById(inputId).value = '';
+        }
+
+        async function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            try {
+                await navigator.clipboard.writeText(element.textContent);
+                showAlert('Copied to clipboard!', 'success');
+            } catch (err) {
+                showAlert('Copy operation failed.', 'error');
+            }
+        }
+
+        async function convertToJSON() {
+            const input = document.getElementById('csvToJsonInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter CSV data.', 'warning');
+                return;
+            }
+
+            showLoading('jsonLoadingSpinner', true);
+
+            try {
+                const response = await fetch('@Url.Action("ConvertToJSON", "CsvTo")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `csvInput=${encodeURIComponent(input)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('jsonOutput').textContent = result.result;
+                    document.getElementById('jsonResults').style.display = 'block';
+                    showAlert('CSV successfully converted to JSON!', 'success');
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('An error occurred: ' + error.message, 'error');
+            } finally {
+                showLoading('jsonLoadingSpinner', false);
+            }
+        }
+
+        async function convertToXML() {
+            const input = document.getElementById('csvToXmlInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter CSV data.', 'warning');
+                return;
+            }
+
+            showLoading('xmlLoadingSpinner', true);
+
+            try {
+                const response = await fetch('@Url.Action("ConvertToXML", "CsvTo")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `csvInput=${encodeURIComponent(input)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('xmlOutput').textContent = result.result;
+                    document.getElementById('xmlResults').style.display = 'block';
+                    showAlert('CSV successfully converted to XML!', 'success');
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('An error occurred: ' + error.message, 'error');
+            } finally {
+                showLoading('xmlLoadingSpinner', false);
+            }
+        }
+
+        async function convertToYAML() {
+            const input = document.getElementById('csvToYamlInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter CSV data.', 'warning');
+                return;
+            }
+
+            showLoading('yamlLoadingSpinner', true);
+
+            try {
+                const response = await fetch('@Url.Action("ConvertToYAML", "CsvTo")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `csvInput=${encodeURIComponent(input)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('yamlOutput').textContent = result.result;
+                    document.getElementById('yamlResults').style.display = 'block';
+                    showAlert('CSV successfully converted to YAML!', 'success');
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('An error occurred: ' + error.message, 'error');
+            } finally {
+                showLoading('yamlLoadingSpinner', false);
+            }
+        }
+
+        async function convertToHTML() {
+            const input = document.getElementById('csvToHtmlInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter CSV data.', 'warning');
+                return;
+            }
+
+            showLoading('htmlLoadingSpinner', true);
+
+            try {
+                const response = await fetch('@Url.Action("ConvertToHTML", "CsvTo")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `csvInput=${encodeURIComponent(input)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('htmlOutput').textContent = result.result;
+                    document.getElementById('htmlPreview').innerHTML = result.result;
+                    document.getElementById('htmlResults').style.display = 'block';
+                    showAlert('CSV successfully converted to HTML Table!', 'success');
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('An error occurred: ' + error.message, 'error');
+            } finally {
+                showLoading('htmlLoadingSpinner', false);
+            }
+        }
+
+        async function formatCSV() {
+            const input = document.getElementById('formatCsvInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter CSV data.', 'warning');
+                return;
+            }
+
+            showLoading('formatLoadingSpinner', true);
+
+            try {
+                const response = await fetch('@Url.Action("FormatCSV", "CsvTo")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `csvInput=${encodeURIComponent(input)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('formatOutput').textContent = result.result;
+                    document.getElementById('formatResults').style.display = 'block';
+                    showAlert('CSV successfully formatted!', 'success');
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('An error occurred: ' + error.message, 'error');
+            } finally {
+                showLoading('formatLoadingSpinner', false);
+            }
+        }
+    </script>
+}
