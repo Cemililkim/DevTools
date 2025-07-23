@@ -1,0 +1,424 @@
+﻿@{
+    ViewData["Title"] = "XML Converter";
+}
+
+<div class="tool-container">
+    <div class="tool-header">
+        <h1 class="tool-title">XML Converter</h1>
+        <p class="tool-description">
+            Convert your XML data to different formats like JSON, CSV, YAML, and HTML.
+        </p>
+    </div>
+
+    <div class="tab-container">
+        <div class="tab-nav">
+            <button class="tab-button active" data-tab="xml-to-json">XML → JSON</button>
+            <button class="tab-button" data-tab="xml-to-csv">XML → CSV</button>
+            <button class="tab-button" data-tab="xml-to-yaml">XML → YAML</button>
+            <button class="tab-button" data-tab="xml-to-html">XML → HTML Display</button>
+            <button class="tab-button" data-tab="format-xml">Format XML</button>
+        </div>
+
+        <!-- XML to JSON Tab -->
+        <div class="tab-content" id="xml-to-json">
+            <div class="form-group">
+                <label class="form-label">XML Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>XML Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('xmlToJsonInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="xmlToJsonInput" placeholder="&lt;root&gt;&#10;  &lt;person id=&quot;1&quot;&gt;&#10;    &lt;name&gt;John&lt;/name&gt;&#10;    &lt;age&gt;25&lt;/age&gt;&#10;  &lt;/person&gt;&#10;&lt;/root&gt;"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="convertToJSON()">
+                    <span class="loading-spinner" id="jsonLoadingSpinner" style="display: none;"></span>
+                    Convert to JSON
+                </button>
+            </div>
+            <div class="results-container" id="jsonResults" style="display: none;">
+                <div class="results-header">
+                    <span>JSON Result</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('jsonOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="jsonOutput"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- XML to CSV Tab -->
+        <div class="tab-content" id="xml-to-csv" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">XML Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>XML Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('xmlToCsvInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="xmlToCsvInput" placeholder="&lt;products&gt;&#10;  &lt;product&gt;&#10;    &lt;name&gt;Laptop&lt;/name&gt;&#10;    &lt;price&gt;999.99&lt;/price&gt;&#10;    &lt;stock&gt;15&lt;/stock&gt;&#10;  &lt;/product&gt;&#10;  &lt;product&gt;&#10;    &lt;name&gt;Mouse&lt;/name&gt;&#10;    &lt;price&gt;29.99&lt;/price&gt;&#10;    &lt;stock&gt;50&lt;/stock&gt;&#10;  &lt;/product&gt;&#10;&lt;/products&gt;"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="convertToCSV()">
+                    <span class="loading-spinner" id="csvLoadingSpinner" style="display: none;"></span>
+                    Convert to CSV
+                </button>
+            </div>
+            <div class="results-container" id="csvResults" style="display: none;">
+                <div class="results-header">
+                    <span>CSV Result</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('csvOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="csvOutput"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- XML to YAML Tab -->
+        <div class="tab-content" id="xml-to-yaml" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">XML Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>XML Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('xmlToYamlInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="xmlToYamlInput" placeholder="&lt;config&gt;&#10;  &lt;server port=&quot;8080&quot;&gt;localhost&lt;/server&gt;&#10;  &lt;ssl enabled=&quot;true&quot; /&gt;&#10;&lt;/config&gt;"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="convertToYAML()">
+                    <span class="loading-spinner" id="yamlLoadingSpinner" style="display: none;"></span>
+                    Convert to YAML
+                </button>
+            </div>
+            <div class="results-container" id="yamlResults" style="display: none;">
+                <div class="results-header">
+                    <span>YAML Result</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('yamlOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="yamlOutput"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- XML to HTML Display Tab -->
+        <div class="tab-content" id="xml-to-html" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">XML Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>XML Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('xmlToHtmlInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="xmlToHtmlInput" placeholder="&lt;employees&gt;&#10;  &lt;employee id=&quot;1&quot;&gt;&#10;    &lt;name&gt;John Doe&lt;/name&gt;&#10;    &lt;department&gt;Engineering&lt;/department&gt;&#10;    &lt;salary&gt;75000&lt;/salary&gt;&#10;  &lt;/employee&gt;&#10;&lt;/employees&gt;"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="convertToHTML()">
+                    <span class="loading-spinner" id="htmlLoadingSpinner" style="display: none;"></span>
+                    Convert to HTML Display
+                </button>
+            </div>
+            <div class="results-container" id="htmlResults" style="display: none;">
+                <div class="results-header">
+                    <span>HTML Display Result</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('htmlOutput')">Copy HTML</button>
+                </div>
+                <div class="results-content">
+                    <div class="html-preview" id="htmlPreview"></div>
+                    <details style="margin-top: 10px;">
+                        <summary style="cursor: pointer; font-weight: bold;">View HTML Source</summary>
+                        <pre class="code-editor" id="htmlOutput" style="margin-top: 10px;"></pre>
+                    </details>
+                </div>
+            </div>
+        </div>
+
+        <!-- Format XML Tab -->
+        <div class="tab-content" id="format-xml" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">XML Data:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>XML Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('formatXmlInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="formatXmlInput" placeholder="&lt;root&gt;&lt;item&gt;value&lt;/item&gt;&lt;item&gt;value2&lt;/item&gt;&lt;/root&gt;"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="formatXML()">
+                    <span class="loading-spinner" id="formatLoadingSpinner" style="display: none;"></span>
+                    Format XML
+                </button>
+            </div>
+            <div class="results-container" id="formatResults" style="display: none;">
+                <div class="results-header">
+                    <span>Formatted XML</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('formatOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="formatOutput"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Container -->
+    <div id="alertContainer"></div>
+</div>
+
+<style>
+.xml-display-container {
+    background-color: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 15px;
+    font-family: monospace;
+    font-size: 14px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.xml-element {
+    margin: 2px 0;
+}
+
+.xml-tag {
+    color: #0066cc;
+    font-weight: bold;
+}
+
+.xml-text {
+    color: #333;
+    margin-left: 20px;
+    font-style: italic;
+}
+</style>
+
+@section Scripts {
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const tabId = this.getAttribute('data-tab');
+
+                // Remove active class from all buttons and content
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+
+                // Add active class to clicked button and show content
+                this.classList.add('active');
+                document.getElementById(tabId).style.display = 'block';
+            });
+        });
+
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `<span>${message}</span>`;
+
+            alertContainer.appendChild(alertDiv);
+
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        function showLoading(spinnerId, show) {
+            const spinner = document.getElementById(spinnerId);
+            spinner.style.display = show ? 'inline-block' : 'none';
+        }
+
+        function clearInput(inputId) {
+            document.getElementById(inputId).value = '';
+        }
+
+        async function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            try {
+                await navigator.clipboard.writeText(element.textContent);
+                showAlert('Copied to clipboard!', 'success');
+            } catch (err) {
+                showAlert('Copy operation failed.', 'error');
+            }
+        }
+
+        async function convertToJSON() {
+            const input = document.getElementById('xmlToJsonInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter XML data.', 'warning');
+                return;
+            }
+
+            showLoading('jsonLoadingSpinner', true);
+
+            try {
+                const response = await fetch('@Url.Action("ConvertToJSON", "XmlTo")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `xmlInput=${encodeURIComponent(input)}`
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    document.getElementById('jsonOutput').textContent = result.result;
+                    document.getElementById('jsonResults').style.display = 'block';
+                    showAlert('XML successfully converted to JSON!', 'success');
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('An error occurred: ' + error.message, 'error');
+            } finally {
+                showLoading('jsonLoadingSpinner', false);
+            }
+        }
+
+        async function convertToCSV() {
+                    const input = document.getElementById('xmlToCsvInput').value;
+                    if (!input.trim()) {
+                        showAlert('Please enter XML data.', 'warning');
+                        return;
+                    }
+
+                    showLoading('csvLoadingSpinner', true);
+
+                    try {
+                        const response = await fetch('@Url.Action("ConvertToCSV", "XmlTo")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `xmlInput=${encodeURIComponent(input)}`
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            document.getElementById('csvOutput').textContent = result.result;
+                            document.getElementById('csvResults').style.display = 'block';
+                            showAlert('XML successfully converted to CSV!', 'success');
+                        } else {
+                            showAlert(result.error, 'error');
+                        }
+                    } catch (error) {
+                        showAlert('An error occurred: ' + error.message, 'error');
+                    } finally {
+                        showLoading('csvLoadingSpinner', false);
+                    }
+                }
+
+                async function convertToYAML() {
+                    const input = document.getElementById('xmlToYamlInput').value;
+                    if (!input.trim()) {
+                        showAlert('Please enter XML data.', 'warning');
+                        return;
+                    }
+
+                    showLoading('yamlLoadingSpinner', true);
+
+                    try {
+                        const response = await fetch('@Url.Action("ConvertToYAML", "XmlTo")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `xmlInput=${encodeURIComponent(input)}`
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            document.getElementById('yamlOutput').textContent = result.result;
+                            document.getElementById('yamlResults').style.display = 'block';
+                            showAlert('XML successfully converted to YAML!', 'success');
+                        } else {
+                            showAlert(result.error, 'error');
+                        }
+                    } catch (error) {
+                        showAlert('An error occurred: ' + error.message, 'error');
+                    } finally {
+                        showLoading('yamlLoadingSpinner', false);
+                    }
+                }
+
+                async function convertToHTML() {
+                    const input = document.getElementById('xmlToHtmlInput').value;
+                    if (!input.trim()) {
+                        showAlert('Please enter XML data.', 'warning');
+                        return;
+                    }
+
+                    showLoading('htmlLoadingSpinner', true);
+
+                    try {
+                        const response = await fetch('@Url.Action("ConvertToHTML", "XmlTo")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `xmlInput=${encodeURIComponent(input)}`
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            document.getElementById('htmlOutput').textContent = result.result;
+                            document.getElementById('htmlPreview').innerHTML = result.result;
+                            document.getElementById('htmlResults').style.display = 'block';
+                            showAlert('XML successfully converted to HTML Display!', 'success');
+                        } else {
+                            showAlert(result.error, 'error');
+                        }
+                    } catch (error) {
+                        showAlert('An error occurred: ' + error.message, 'error');
+                    } finally {
+                        showLoading('htmlLoadingSpinner', false);
+                    }
+                }
+
+                async function formatXML() {
+                    const input = document.getElementById('formatXmlInput').value;
+                    if (!input.trim()) {
+                        showAlert('Please enter XML data.', 'warning');
+                        return;
+                    }
+
+                    showLoading('formatLoadingSpinner', true);
+
+                    try {
+                        const response = await fetch('@Url.Action("FormatXML", "XmlTo")', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: `xmlInput=${encodeURIComponent(input)}`
+                        });
+
+                        const result = await response.json();
+
+                        if (result.success) {
+                            document.getElementById('formatOutput').textContent = result.result;
+                            document.getElementById('formatResults').style.display = 'block';
+                            showAlert('XML successfully formatted!', 'success');
+                        } else {
+                            showAlert(result.error, 'error');
+                        }
+                    } catch (error) {
+                        showAlert('An error occurred: ' + error.message, 'error');
+                    } finally {
+                        showLoading('formatLoadingSpinner', false);
+                    }
+                }
+    </script>
+}
