@@ -1,0 +1,170 @@
+﻿@{
+    ViewData["Title"] = "Base64 Converter";
+}
+
+<div class="container">
+    <div class="tool-header">
+        <h1 class="tool-title">Base64 Converter</h1>
+        <p class="tool-description">
+            Encode or decode your text and files using Base64 format.
+        </p>
+    </div>
+
+    <div class="tab-container">
+        <div class="tab-nav">
+            <button class="tab-button active" data-tab="base64-encode">Encode</button>
+            <button class="tab-button" data-tab="base64-decode">Decode</button>
+        </div>
+
+        <!-- Encode Tab -->
+        <div class="tab-content" id="base64-encode">
+            <div class="form-group">
+                <label class="form-label">Text to Encode:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('encodeInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="encodeInput" placeholder="Hello, World!"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="encodeBase64()">
+                    <span class="loading-spinner" id="encodeSpinner" style="display: none;"></span>
+                    Encode
+                </button>
+            </div>
+            <div class="results-container" id="encodeResults" style="display: none;">
+                <div class="results-header">
+                    <span>Encoded Base64</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('encodeOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="encodeOutput"></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- Decode Tab -->
+        <div class="tab-content" id="base64-decode" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">Base64 to Decode:</label>
+                <div class="code-editor-container">
+                    <div class="code-editor-header">
+                        <span>Input</span>
+                        <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('decodeInput')">Clear</button>
+                    </div>
+                    <textarea class="code-editor" id="decodeInput" placeholder="SGVsbG8sIFdvcmxkIQ=="></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="decodeBase64()">
+                    <span class="loading-spinner" id="decodeSpinner" style="display: none;"></span>
+                    Decode
+                </button>
+            </div>
+            <div class="results-container" id="decodeResults" style="display: none;">
+                <div class="results-header">
+                    <span>Decoded Text</span>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('decodeOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="code-editor" id="decodeOutput"></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="alertContainer"></div>
+</div>
+
+@section Scripts {
+    <script>
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+                this.classList.add('active');
+                document.getElementById(tabId).style.display = 'block';
+            });
+        });
+
+        function showLoading(id, show) {
+            document.getElementById(id).style.display = show ? 'inline-block' : 'none';
+        }
+
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alertContainer.appendChild(alert);
+            setTimeout(() => alert.remove(), 4000);
+        }
+
+        function clearInput(id) {
+            document.getElementById(id).value = '';
+        }
+
+        async function copyToClipboard(id) {
+            const element = document.getElementById(id);
+            try {
+                await navigator.clipboard.writeText(element.textContent);
+                showAlert('Copied to clipboard!', 'success');
+            } catch {
+                showAlert('Failed to copy!', 'error');
+            }
+        }
+
+        async function encodeBase64() {
+            const input = document.getElementById('encodeInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter text to encode.', 'warning');
+                return;
+            }
+            showLoading('encodeSpinner', true);
+
+            const response = await fetch('@Url.Action("Encode", "Base64")', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `input=${encodeURIComponent(input)}`
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                document.getElementById('encodeOutput').textContent = result.result;
+                document.getElementById('encodeResults').style.display = 'block';
+            } else {
+                showAlert(result.error, 'error');
+            }
+
+            showLoading('encodeSpinner', false);
+        }
+
+        async function decodeBase64() {
+            const input = document.getElementById('decodeInput').value;
+            if (!input.trim()) {
+                showAlert('Please enter Base64 to decode.', 'warning');
+                return;
+            }
+            showLoading('decodeSpinner', true);
+
+            const response = await fetch('@Url.Action("Decode", "Base64")', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `input=${encodeURIComponent(input)}`
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                document.getElementById('decodeOutput').textContent = result.result;
+                document.getElementById('decodeResults').style.display = 'block';
+            } else {
+                showAlert(result.error, 'error');
+            }
+
+            showLoading('decodeSpinner', false);
+        }
+    </script>
+}
