@@ -1,12 +1,117 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "DevTools - All Tools";
 }
 
-<section class="text-center">
-    <h1 class="hero">Developing Starts Here!</h1>
-    <p class="hero-subtitle">
-        Start your coding journey with passion, purpose, and powerful tools. 🚀
-    </p>
-</section>
+<div class="container text-center">
+    <!-- Hero Section -->
+    <h1 class="hero">Welcome to DevTools!</h1>
+    <p class="hero-subtitle">All-in-one toolbox for developers. Simple, private and powerful.</p>
 
+    <!-- Search Box -->
+    <div class="form-group">
+        <input id="searchInput" type="text" class="form-control" placeholder="Search tools by name or description..." autocomplete="off" />
+    </div>
 
+    <!-- Tool Cards -->
+    <div id="toolContainer" class="mt-5"></div>
+
+    <!-- Why Use DevTools Section -->
+    <section class="text-left">
+        <h2 class="tool-title">Why Use DevTools?</h2>
+        <ul style="color: var(--text-secondary); font-size: 1.1rem; line-height: 2;">
+            <li>🔐 <strong>No data tracking</strong>: We don’t store or send your data anywhere. Everything runs in your browser.</li>
+            <li>⚡ <strong>Blazing fast</strong>: No login, no clutter. Just tools, instantly.</li>
+            <li>🧰 <strong>Multi-tool hub</strong>: JSON, YAML, CSV, XML, SQL, encoding, formatting... all of them here!</li>
+            <li>🎨 <strong>Modern design</strong>: Clean, dark, and minimal UI to reduce eye strain and boost productivity.</li>
+        </ul>
+    </section>
+</div>
+
+@section Scripts {
+    <script>
+        let toolsData = null;
+
+        async function loadTools() {
+            try {
+                const res = await fetch('/data/tools.json');
+                if (!res.ok) throw new Error('Failed to load tools.json');
+                const data = await res.json();
+                toolsData = data;
+                renderTools(data.categories);
+            } catch (err) {
+                document.getElementById('toolContainer').innerHTML =
+                    `<div class="alert alert-error">Error loading tools: ${err.message}</div>`;
+            }
+        }
+
+        function renderTools(categories) {
+            const container = document.getElementById('toolContainer');
+            container.innerHTML = '';
+
+            if (categories.length === 0) {
+                container.innerHTML = `<p class="text-center" style="color: var(--text-secondary);">No tools found 😢</p>`;
+                return;
+            }
+
+            categories.forEach(category => {
+                const catSection = document.createElement('section');
+                catSection.className = 'mb-5';
+
+                const catTitle = document.createElement('h2');
+                catTitle.textContent = category.name;
+                catTitle.className = 'tool-title mb-3';
+                catSection.appendChild(catTitle);
+
+                const grid = document.createElement('div');
+                grid.className = 'feature-grid';
+
+                category.tools.forEach(tool => {
+                    const card = document.createElement('div');
+                    card.className = 'feature-card';
+                    card.style.cursor = 'pointer';
+
+                    card.innerHTML = `
+                        <h3>${tool.title}</h3>
+                        <p>${tool.description}</p>
+                        <a href="${tool.url}" class="btn btn-primary" tabindex="0" aria-label="Go to ${tool.title}">${tool.name} &raquo;</a>
+                    `;
+
+                    card.addEventListener('click', e => {
+                        if (e.target.tagName.toLowerCase() !== 'a') {
+                            window.location.href = tool.url;
+                        }
+                    });
+
+                    grid.appendChild(card);
+                });
+
+                catSection.appendChild(grid);
+                container.appendChild(catSection);
+            });
+        }
+
+        document.getElementById('searchInput').addEventListener('input', function () {
+            const query = this.value.trim().toLowerCase();
+            if (!toolsData) return;
+
+            if (!query) {
+                renderTools(toolsData.categories);
+                return;
+            }
+
+            const filteredCategories = toolsData.categories
+                .map(cat => ({
+                    ...cat,
+                    tools: cat.tools.filter(tool =>
+                        tool.title.toLowerCase().includes(query) ||
+                        tool.description.toLowerCase().includes(query)
+                    )
+                }))
+                .filter(cat => cat.tools.length > 0);
+
+            renderTools(filteredCategories);
+        });
+
+        loadTools();
+    </script>
+}

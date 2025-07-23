@@ -4,10 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - DevTools</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DevTools.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
 </head>
 <body>
     <header>
@@ -17,36 +19,66 @@
                     <i class="bi bi-braces"></i> DevTools
                 </a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto">
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav ml-auto mb-2 mb-lg-0">
+                        <!-- Conversion Tools -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle fw-semibold" href="#" id="formatDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                Format Tools
+                            <a class="nav-link dropdown-toggle fw-semibold" href="#" id="conversionDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Conversion Tools
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="formatDropdown">
+                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="conversionDropdown">
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" asp-controller="XmlTo" asp-action="Index">
-                                        <i class="bi bi-code-slash me-2"></i> XML Converter
+                                        <i class="bi bi-filetype-xml"></i> XML Converter
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" asp-controller="CsvTo" asp-action="Index">
-                                        <i class="bi bi-filetype-csv"></i> CSV Converter
+                                        <i class="bi bi-filetype-csv me-2"></i> CSV Converter
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" asp-controller="JsonTo" asp-action="Index">
-                                        <i class="bi bi-filetype-json me-2"></i> JSON Formatter
+                                        <i class="bi bi-filetype-json me-2"></i> JSON conversionter
                                     </a>
                                 </li>
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" asp-controller="YamlTo" asp-action="Index">
-                                        <i class="bi bi-diagram-3 me-2"></i> YAML Tools
+                                        <i class="bi bi-filetype-yml"></i> YAML Tools
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Encoding & Security Tools -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-semibold" href="#" id="securityDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Encoding & Security Tools
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="securityDropdown">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="Base64Converter" asp-action="Index">
+                                        <i class="bi bi-code-slash me-2"></i> Base64 Converter
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="HashGenerator" asp-action="Index">
+                                        <i class="bi bi-shield-lock me-2"></i> Hash Generator
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="PasswordGenerator" asp-action="Index">
+                                        <i class="bi bi-key me-2"></i> Password Generator
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="UUIDGenerator" asp-action="Index">
+                                        <i class="bi bi-fingerprint me-2"></i> UUID Generator
                                     </a>
                                 </li>
                             </ul>
@@ -57,15 +89,17 @@
         </nav>
     </header>
 
-
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
+
+    <!-- JS -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

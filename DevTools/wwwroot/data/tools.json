@@ -1,0 +1,62 @@
+﻿{
+  "categories": [
+    {
+      "name": "Conversion Tools",
+      "tools": [
+        {
+          "name": "XML Converter",
+          "url": "/XmlTo/Index",
+          "title": "XML Converter",
+          "description": "Convert XML to ..."
+        },
+        {
+          "name": "CSV Converter",
+          "url": "/CsvTo/Index",
+          "title": "CSV Converter",
+          "description": "Convert CSV to ..."
+        },
+        {
+          "name": "JSON Converter",
+          "url": "/JsonTo/Index",
+          "title": "JSON Formatter",
+          "description": "Convert JSON to ..."
+        },
+        {
+          "name": "YAML Converter",
+          "url": "/YamlTo/Index",
+          "title": "YAML Tools",
+          "description": "Convert YAML to ..."
+        }
+      ]
+    },
+    {
+      "name": "Encoding & Security Tools",
+      "tools": [
+        {
+          "name": "Base64 Converter",
+          "url": "/Base64Converter/Index",
+          "title": "Base64 Converter",
+          "description": "Encode/Decode Base64"
+        },
+        {
+          "name": "Hash Generator",
+          "url": "/HashGenerator/Index",
+          "title": "Hash Generator",
+          "description": "Generate MD5, SHA1, SHA256..."
+        },
+        {
+          "name": "Password Generator",
+          "url": "/PasswordGenerator/Index",
+          "title": "Password Generator",
+          "description": "Generate ultra-strong passwords."
+        },
+        {
+          "name": "UUID Generator",
+          "url": "/UUIDGenerator/Index",
+          "title": "UUID Generator",
+          "description": "Generate unique IDs (v4, v1). Unique every time!"
+        }
+      ]
+    }
+  ]
+}
