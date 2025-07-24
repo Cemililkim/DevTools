@@ -66,6 +66,12 @@
           "url": "/GitIgnoreGenerator/Index",
           "title": ".gitignore Generator",
           "description": "Create custom .gitignore files for your projects."
+        },
+        {
+          "name": "Smtp Tester",
+          "url": "/SmtpTester/Index",
+          "title": "Smtp Tester",
+          "description": "Quickly test your SMTP settings by sending a sample email with your own credentials."
         }
       ]
     },

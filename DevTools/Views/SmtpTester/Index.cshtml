@@ -1,0 +1,50 @@
+﻿@{
+    ViewData["Title"] = "SMTP Tester";
+}
+
+<div class="container">
+    <div class="tool-header">
+        <h1 class="tool-title">SMTP Tester</h1>
+        <p class="tool-description">Test your SMTP settings by sending a sample email.</p>
+    </div>
+
+    <form method="post" action="SendTestEmail">
+        <div class="form-group">
+            <label>SMTP Server</label>
+            <input type="text" name="smtpServer" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label>Port</label>
+            <input type="number" name="port" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label>Enable SSL?</label>
+            <input type="checkbox" name="enableSsl" checked />
+        </div>
+        <div class="form-group">
+            <label>Username (SMTP Auth)</label>
+            <input type="text" name="username" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label>From Email</label>
+            <input type="email" name="fromEmail" class="form-control" required />
+        </div>
+        <div class="form-group">
+            <label>To Email</label>
+            <input type="email" name="toEmail" class="form-control" required />
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send Test Email</button>
+    </form>
+
+    @if (ViewBag.Result != null)
+    {
+        <div class="alert @(ViewBag.IsSuccess ? "alert-success" : "alert-danger") mt-3">
+            <strong>@ViewBag.Result</strong>
+        </div>
+    }
+</div>
