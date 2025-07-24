@@ -55,6 +55,12 @@
           "url": "/UUIDGenerator/Index",
           "title": "UUID Generator",
           "description": "Generate unique IDs (v4, v1). Unique every time!"
+        },
+        {
+          "name": "QR Code Generator & Scanner",
+          "url": "/QRCodeTools/Index",
+          "title": "QR Code Generator & Scanner",
+          "description": "Easily generate and scan QR codes with webcam support."
         }
       ]
     },

@@ -1,0 +1,173 @@
+﻿@{
+    ViewData["Title"] = "QR Code Generator & Scanner";
+}
+
+<style>
+    #qrVideo video {
+        transform: scaleX(-1) !important;
+        width: 100% !important;
+        height: auto !important;
+    }
+
+    #qrVideo {
+        max-width: 400px;
+        margin: 0 auto;
+        border: 2px dashed #ccc;
+        padding: 8px;
+        border-radius: 8px;
+    }
+</style>
+
+<div class="container">
+    <div class="tool-header">
+        <h1 class="tool-title">QR Code Generator & Scanner</h1>
+        <p class="tool-description">Create and scan QR codes easily. Perfect for links, text, or secrets</p>
+    </div>
+
+    <!-- QR Code Generator -->
+    <div class="form-group">
+        <label class="form-label">Enter text to generate QR Code:</label>
+        <input type="text" id="qrText" class="form-control" placeholder="Enter text here...">
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary" onclick="generateQRCode()">Generate QR Code</button>
+    </div>
+    <div class="text-center mb-4">
+        <canvas id="qrCanvas" style="margin-top: 15px;"></canvas>
+        <div class="form-group mt-2" id="downloadBtnContainer" style="display:none;">
+            <button class="btn btn-primary" onclick="downloadQRCode()">Download as PNG</button>
+        </div>
+    </div>
+
+
+    <hr />
+
+    <!-- QR Code Scanner -->
+    <div class="form-group">
+        <label class="form-label">Scan QR Code via Webcam:</label>
+        <div id="qrVideo"></div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-primary" onclick="startScanner()">Start Scanning</button>
+        <button class="btn btn-secondary" onclick="stopScanner()">Stop</button>
+    </div>
+    <div id="scanResult" class="alert alert-info mt-3" style="display:none;"></div>
+    <div id="scanResultActions" style="display: none;" class="mt-2 text-end">
+        <button class="btn btn-sm btn-secondary" onclick="copyScannedText()">Copy</button>
+        <button class="btn btn-sm btn-primary" onclick="openScannedInNewTab()">Open in New Tab</button>
+    </div>
+
+    <div id="qrAlertContainer"></div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.0/build/qrcode.min.js"></script>
+    <script src="https://rawcdn.githack.com/mebjas/html5-qrcode/master/minified/html5-qrcode.min.js"></script>
+
+    <script>
+        // Show alert messages for 3 seconds
+        function showQRAlert(message, type = 'info') {
+            const container = document.getElementById('qrAlertContainer');
+            container.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => { container.innerHTML = ''; }, 3000);
+        }
+
+        // Generate QR Code on canvas
+        function generateQRCode() {
+            const text = document.getElementById('qrText').value.trim();
+            const downloadBtnContainer = document.getElementById('downloadBtnContainer');
+
+            if (!text) {
+                showQRAlert("Please enter text to generate QR code.", 'warning');
+                downloadBtnContainer.style.display = 'none';  
+                return;
+            }
+
+            const canvas = document.getElementById('qrCanvas');
+            QRCode.toCanvas(canvas, text, { width: 200 }, function (error) {
+                if (error) {
+                    showQRAlert("Error generating QR Code.", 'danger');
+                    downloadBtnContainer.style.display = 'none';  
+                    return;
+                }
+                showQRAlert("QR Code generated successfully!", 'success');
+                downloadBtnContainer.style.display = 'block';  
+            });
+        }
+
+
+        // Download QR Code as PNG file
+        function downloadQRCode() {
+            const canvas = document.getElementById("qrCanvas");
+            if (!canvas.toDataURL || canvas.width === 0) {
+                showQRAlert("No QR Code to download!", 'warning');
+                return;
+            }
+
+            const link = document.createElement("a");
+            link.download = "qr-code.png";
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        }
+
+        // Scanner instance variable
+        let html5QrScanner = null;
+
+        // Start scanning QR Code via webcam
+        function startScanner() {
+            const qrRegionId = "qrVideo";
+
+            if (!html5QrScanner) {
+                html5QrScanner = new Html5Qrcode(qrRegionId);
+            }
+
+            html5QrScanner.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                (decodedText, decodedResult) => {
+                    const resultBox = document.getElementById("scanResult");
+                    resultBox.innerText = `Scanned: ${decodedText}`;
+                    resultBox.style.display = 'block';
+                    document.getElementById("scanResultActions").style.display = 'block';
+                },
+                (errorMessage) => {
+                    // Optional: handle scan errors here
+                }
+            ).catch(err => {
+                showQRAlert("Camera access denied or not available: " + err, 'danger');
+            });
+        }
+
+        // Stop scanning
+        function stopScanner() {
+            if (html5QrScanner) {
+                html5QrScanner.stop().then(() => {
+                    html5QrScanner.clear();
+                    document.getElementById("scanResult").style.display = 'none';
+                    document.getElementById("scanResultActions").style.display = 'none';
+                });
+            }
+        }
+
+        // Copy scanned text to clipboard
+        function copyScannedText() {
+            const text = document.getElementById("scanResult").innerText.replace("Scanned: ", "");
+            navigator.clipboard.writeText(text)
+                .then(() => showQRAlert("Copied to clipboard!", 'success'))
+                .catch(() => showQRAlert("Failed to copy to clipboard!", 'danger'));
+        }
+
+        // Open scanned text in new tab if it is a valid URL
+        function openScannedInNewTab() {
+            const text = document.getElementById("scanResult").innerText.replace("Scanned: ", "");
+            if (text.startsWith("http://") || text.startsWith("https://")) {
+                window.open(text, '_blank');
+            } else {
+                showQRAlert("Scanned text is not a valid URL!", 'warning');
+            }
+        }
+    </script>
+}
