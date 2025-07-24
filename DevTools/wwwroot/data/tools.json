@@ -62,18 +62,6 @@
       "name": "Development Tools",
       "tools": [
         {
-          "name": "Diff Checker",
-          "url": "/DiffChecker/Index",
-          "title": "Diff Checker",
-          "description": "Compare two texts and see their differences."
-        },
-        {
-          "name": "Lorem Ipsum Generator",
-          "url": "/LoremIpsumGenerator/Index",
-          "title": "Lorem Ipsum Generator",
-          "description": "Generate placeholder text easily."
-        },
-        {
           "name": "GitIgnore Generator",
           "url": "/GitIgnoreGenerator/Index",
           "title": ".gitignore Generator",
@@ -95,6 +83,41 @@
           "url": "/ColorConverter/Index",
           "title": "Color Converter",
           "description": "Transform colors easily and clearly!"
+        }
+      ]
+    },
+    {
+      "name": "Text Tools",
+      "tools": [
+        {
+          "name": "Diff Checker",
+          "url": "/DiffChecker/Index",
+          "title": "Diff Checker",
+          "description": "Compare two texts and see their differences."
+        },
+        {
+          "name": "Lorem Ipsum Generator",
+          "url": "/LoremIpsumGenerator/Index",
+          "title": "Lorem Ipsum Generator",
+          "description": "Generate placeholder text easily."
+        },
+        {
+          "name": "Case Converter",
+          "url": "/CaseConverter/Index",
+          "title": "Case Converter",
+          "description": "Convert text between camelCase, PascalCase, snake_case, and more."
+        },
+        {
+          "name": "Word Counter",
+          "url": "/WordCounter/Index",
+          "title": "Word Counter",
+          "description": "Count words, characters, lines, and get reading time instantly."
+        },
+        {
+          "name": "Duplicate Line Remover",
+          "url": "/DuplicateLineRemover/Index",
+          "title": "Duplicate Liner Remover",
+          "description": "Find, remove or compare duplicate lines in your text easily."
         }
       ]
     }

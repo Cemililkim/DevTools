@@ -1,0 +1,244 @@
+﻿@{
+    ViewData["Title"] = "Case Converter";
+}
+
+<div class="container">
+    <div class="tool-header">
+        <h1 class="tool-title">Case Converter</h1>
+        <p class="tool-description">
+            Convert your text between different case formats easily.
+        </p>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">Text to Convert:</label>
+        <div class="form-control-container">
+            <div class="form-control-header">
+                <span>Input</span>
+                <button type="button" class="btn btn-secondary ml-auto" onclick="clearInput()">Clear</button>
+            </div>
+            <textarea class="form-control" id="inputText" placeholder="Enter your text here..."></textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <button type="button" class="btn btn-primary" onclick="convertText()">
+            <span class="loading-spinner" id="convertSpinner" style="display: none;"></span>
+            Convert Text
+        </button>
+    </div>
+
+    <div class="feature-grid" id="resultsGrid" style="display: none;">
+        <div class="feature-card" id="uppercaseCard">
+            <h3>UPPERCASE</h3>
+            <div class="form-control-container">
+                <div class="form-control-header">
+                    <span>Result</span>
+                    <button type="button" class="btn btn-secondary ml-auto" onclick="copyToClipboard('uppercaseResult')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="form-control" id="uppercaseResult" readonly></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-card" id="lowercaseCard">
+            <h3>lowercase</h3>
+            <div class="form-control-container">
+                <div class="form-control-header">
+                    <span>Result</span>
+                    <button type="button" class="btn btn-secondary ml-auto" onclick="copyToClipboard('lowercaseResult')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="form-control" id="lowercaseResult" readonly></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-card" id="titleCard">
+            <h3>Title Case</h3>
+            <div class="form-control-container">
+                <div class="form-control-header">
+                    <span>Result</span>
+                    <button type="button" class="btn btn-secondary ml-auto" onclick="copyToClipboard('titleResult')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="form-control" id="titleResult" readonly></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-card" id="camelCard">
+            <h3>camelCase</h3>
+            <div class="form-control-container">
+                <div class="form-control-header">
+                    <span>Result</span>
+                    <button type="button" class="btn btn-secondary ml-auto" onclick="copyToClipboard('camelResult')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="form-control" id="camelResult" readonly></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-card" id="pascalCard">
+            <h3>PascalCase</h3>
+            <div class="form-control-container">
+                <div class="form-control-header">
+                    <span>Result</span>
+                    <button type="button" class="btn btn-secondary ml-auto" onclick="copyToClipboard('pascalResult')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="form-control" id="pascalResult" readonly></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-card" id="snakeCard">
+            <h3>snake_case</h3>
+            <div class="form-control-container">
+                <div class="form-control-header">
+                    <span>Result</span>
+                    <button type="button" class="btn btn-secondary ml-auto" onclick="copyToClipboard('snakeResult')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="form-control" id="snakeResult" readonly></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-card" id="kebabCard">
+            <h3>kebab-case</h3>
+            <div class="form-control-container">
+                <div class="form-control-header">
+                    <span>Result</span>
+                    <button type="button" class="btn btn-secondary ml-auto" onclick="copyToClipboard('kebabResult')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="form-control" id="kebabResult" readonly></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="feature-card" id="constantCard">
+            <h3>CONSTANT_CASE</h3>
+            <div class="form-control-container">
+                <div class="form-control-header">
+                    <span>Result</span>
+                    <button type="button" class="btn btn-secondary ml-auto" onclick="copyToClipboard('constantResult')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <pre class="form-control" id="constantResult" readonly></pre>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="alertContainer"></div>
+</div>
+
+@section Scripts {
+    <script>
+        function showLoading(show) {
+            document.getElementById('convertSpinner').style.display = show ? 'inline-block' : 'none';
+        }
+
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `<i class="fas fa-${getAlertIcon(type)}"></i> ${message}`;
+            alertContainer.appendChild(alert);
+            setTimeout(() => alert.remove(), 4000);
+        }
+
+        function getAlertIcon(type) {
+            const icons = {
+                'success': 'check-circle',
+                'error': 'exclamation-circle',
+                'warning': 'exclamation-triangle',
+                'info': 'info-circle'
+            };
+            return icons[type] || 'info-circle';
+        }
+
+        function clearInput() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('resultsGrid').style.display = 'none';
+        }
+
+        async function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            try {
+                await navigator.clipboard.writeText(element.textContent);
+                showAlert('Copied to clipboard!', 'success');
+            } catch {
+                showAlert('Failed to copy to clipboard!', 'error');
+            }
+        }
+
+        function toTitleCase(str) {
+            return str.replace(/\w\S*/g, (txt) =>
+                txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+            );
+        }
+
+        function toCamelCase(str) {
+            return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word, index) =>
+                index === 0 ? word.toLowerCase() : word.toUpperCase()
+            ).replace(/\s+/g, '');
+        }
+
+        function toPascalCase(str) {
+            return str.replace(/(?:^\w|[A-Z]|\b\w)/g, (word) =>
+                word.toUpperCase()
+            ).replace(/\s+/g, '');
+        }
+
+        function toSnakeCase(str) {
+            return str.replace(/\W+/g, ' ')
+                .split(/ |\B(?=[A-Z])/)
+                .map(word => word.toLowerCase())
+                .join('_');
+        }
+
+        function toKebabCase(str) {
+            return str.replace(/\W+/g, ' ')
+                .split(/ |\B(?=[A-Z])/)
+                .map(word => word.toLowerCase())
+                .join('-');
+        }
+
+        function toConstantCase(str) {
+            return toSnakeCase(str).toUpperCase();
+        }
+
+        function convertText() {
+            const input = document.getElementById('inputText').value;
+
+            if (!input.trim()) {
+                showAlert('Please enter some text to convert.', 'warning');
+                return;
+            }
+
+            showLoading(true);
+
+            // Simulate API call delay
+            setTimeout(() => {
+                // Convert to different cases
+                document.getElementById('uppercaseResult').textContent = input.toUpperCase();
+                document.getElementById('lowercaseResult').textContent = input.toLowerCase();
+                document.getElementById('titleResult').textContent = toTitleCase(input);
+                document.getElementById('camelResult').textContent = toCamelCase(input);
+                document.getElementById('pascalResult').textContent = toPascalCase(input);
+                document.getElementById('snakeResult').textContent = toSnakeCase(input);
+                document.getElementById('kebabResult').textContent = toKebabCase(input);
+                document.getElementById('constantResult').textContent = toConstantCase(input);
+
+                document.getElementById('resultsGrid').style.display = 'grid';
+                showLoading(false);
+                showAlert('Text converted successfully!', 'success');
+            }, 500);
+        }
+    </script>
+}

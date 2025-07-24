@@ -1,0 +1,301 @@
+﻿@{
+    ViewData["Title"] = "Word Counter";
+}
+
+<div class="container">
+    <div class="tool-header">
+        <h1 class="tool-title">Word Counter</h1>
+        <p class="tool-description">
+            Analyze your text and get detailed word, character, paragraph, and sentence statistics.
+        </p>
+    </div>
+
+    <div class="form-group">
+        
+        <div class="form-control-container">
+            <div class="form-control-header">
+                <span>Input</span>
+                <button type="button" class="btn btn-secondary ml-auto" onclick="clearInput()">Clear</button>
+            </div>
+            <textarea class="form-control" id="inputText" placeholder="Enter your text here to get real-time statistics..."></textarea>
+        </div>
+    </div>
+
+    <div class="results-container" id="statsContainer" style="display: none;">
+        <div class="results-header">
+            <span>Text Statistics</span>
+            <button type="button" class="btn btn-secondary" onclick="exportStats()">Export Stats</button>
+        </div>
+        <div class="results-content">
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>Basic Stats</h3>
+                    <table class="results-table">
+                        <tr>
+                            <td>Characters (with spaces)</td>
+                            <td id="charWithSpaces">0</td>
+                        </tr>
+                        <tr>
+                            <td>Characters (without spaces)</td>
+                            <td id="charWithoutSpaces">0</td>
+                        </tr>
+                        <tr>
+                            <td>Words</td>
+                            <td id="wordCount">0</td>
+                        </tr>
+                        <tr>
+                            <td>Sentences</td>
+                            <td id="sentenceCount">0</td>
+                        </tr>
+                        <tr>
+                            <td>Paragraphs</td>
+                            <td id="paragraphCount">0</td>
+                        </tr>
+                        <tr>
+                            <td>Lines</td>
+                            <td id="lineCount">0</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Reading Time</h3>
+                    <table class="results-table">
+                        <tr>
+                            <td>Reading Time (avg. 200 wpm)</td>
+                            <td id="readingTime">0 min</td>
+                        </tr>
+                        <tr>
+                            <td>Speaking Time (avg. 150 wpm)</td>
+                            <td id="speakingTime">0 min</td>
+                        </tr>
+                        <tr>
+                            <td>Average word length</td>
+                            <td id="avgWordLength">0</td>
+                        </tr>
+                        <tr>
+                            <td>Longest word</td>
+                            <td id="longestWord">-</td>
+                        </tr>
+                        <tr>
+                            <td>Shortest word</td>
+                            <td id="shortestWord">-</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Character Analysis</h3>
+                    <table class="results-table">
+                        <tr>
+                            <td>Uppercase letters</td>
+                            <td id="uppercaseCount">0</td>
+                        </tr>
+                        <tr>
+                            <td>Lowercase letters</td>
+                            <td id="lowercaseCount">0</td>
+                        </tr>
+                        <tr>
+                            <td>Numbers</td>
+                            <td id="numberCount">0</td>
+                        </tr>
+                        <tr>
+                            <td>Special characters</td>
+                            <td id="specialCharCount">0</td>
+                        </tr>
+                        <tr>
+                            <td>Spaces</td>
+                            <td id="spaceCount">0</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="feature-card">
+                    <h3>Most Common Words</h3>
+                    <div id="commonWords">
+                        <p>Enter some text to see the most common words...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="alertContainer"></div>
+</div>
+
+@section Scripts {
+    <script>
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `<i class="fas fa-${getAlertIcon(type)}"></i> ${message}`;
+            alertContainer.appendChild(alert);
+            setTimeout(() => alert.remove(), 4000);
+        }
+
+        function clearInput() {
+            document.getElementById('inputText').value = '';
+            document.getElementById('statsContainer').style.display = 'none';
+        }
+
+        function analyzeText() {
+            const text = document.getElementById('inputText').value;
+
+            if (!text.trim()) {
+                document.getElementById('statsContainer').style.display = 'none';
+                return;
+            }
+
+            // Basic counts
+            const charWithSpaces = text.length;
+            const charWithoutSpaces = text.replace(/\s/g, '').length;
+            const words = text.trim() ? text.trim().split(/\s+/) : [];
+            const wordCount = words.length;
+            const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0);
+            const sentenceCount = sentences.length;
+            const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+            const paragraphCount = paragraphs.length;
+            const lines = text.split('\n');
+            const lineCount = lines.length;
+
+            // Character analysis
+            const uppercaseCount = (text.match(/[A-Z]/g) || []).length;
+            const lowercaseCount = (text.match(/[a-z]/g) || []).length;
+            const numberCount = (text.match(/[0-9]/g) || []).length;
+            const spaceCount = (text.match(/\s/g) || []).length;
+            const specialCharCount = charWithSpaces - uppercaseCount - lowercaseCount - numberCount - spaceCount;
+
+            // Word analysis
+            const validWords = words.filter(word => word.length > 0);
+            const avgWordLength = validWords.length > 0 ?
+                (validWords.reduce((sum, word) => sum + word.length, 0) / validWords.length).toFixed(2) : 0;
+
+            const longestWord = validWords.length > 0 ?
+                validWords.reduce((longest, current) => current.length > longest.length ? current : longest) : '-';
+
+            const shortestWord = validWords.length > 0 ?
+                validWords.reduce((shortest, current) => current.length < shortest.length ? current : shortest) : '-';
+
+            // Reading time calculations
+            const readingTimeMinutes = wordCount / 200;
+            const speakingTimeMinutes = wordCount / 150;
+
+            function formatTime(minutes) {
+                if (minutes < 1) {
+                    const seconds = Math.ceil(minutes * 60);
+                    return `${seconds} sec`;
+                }
+                return `${Math.ceil(minutes)} min`;
+            }
+
+            // Update UI
+            document.getElementById('charWithSpaces').textContent = charWithSpaces.toLocaleString();
+            document.getElementById('charWithoutSpaces').textContent = charWithoutSpaces.toLocaleString();
+            document.getElementById('wordCount').textContent = wordCount.toLocaleString();
+            document.getElementById('sentenceCount').textContent = sentenceCount.toLocaleString();
+            document.getElementById('paragraphCount').textContent = paragraphCount.toLocaleString();
+            document.getElementById('lineCount').textContent = lineCount.toLocaleString();
+
+            document.getElementById('readingTime').textContent = formatTime(readingTimeMinutes);
+            document.getElementById('speakingTime').textContent = formatTime(speakingTimeMinutes);
+            document.getElementById('avgWordLength').textContent = avgWordLength + ' chars';
+            document.getElementById('longestWord').textContent = longestWord;
+            document.getElementById('shortestWord').textContent = shortestWord;
+
+            document.getElementById('uppercaseCount').textContent = uppercaseCount.toLocaleString();
+            document.getElementById('lowercaseCount').textContent = lowercaseCount.toLocaleString();
+            document.getElementById('numberCount').textContent = numberCount.toLocaleString();
+            document.getElementById('specialCharCount').textContent = specialCharCount.toLocaleString();
+            document.getElementById('spaceCount').textContent = spaceCount.toLocaleString();
+
+            // Most common words
+            updateCommonWords(validWords);
+
+            document.getElementById('statsContainer').style.display = 'block';
+        }
+
+        function updateCommonWords(words) {
+            if (words.length === 0) {
+                document.getElementById('commonWords').innerHTML = '<p>No words to analyze...</p>';
+                return;
+            }
+
+            // Count word frequency (case insensitive)
+            const wordFreq = {};
+            words.forEach(word => {
+                const cleanWord = word.toLowerCase().replace(/[^\w]/g, '');
+                if (cleanWord.length > 2) { // Skip very short words
+                    wordFreq[cleanWord] = (wordFreq[cleanWord] || 0) + 1;
+                }
+            });
+
+            // Sort by frequency and get top 10
+            const sortedWords = Object.entries(wordFreq)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 10);
+
+            if (sortedWords.length === 0) {
+                document.getElementById('commonWords').innerHTML = '<p>No common words found...</p>';
+                return;
+            }
+
+            let html = '<table class="results-table"><thead><tr><th>Word</th><th>Count</th><th>%</th></tr></thead><tbody>';
+            const totalWords = words.length;
+
+            sortedWords.forEach(([word, count]) => {
+                const percentage = ((count / totalWords) * 100).toFixed(1);
+                html += `<tr><td>${word}</td><td>${count}</td><td>${percentage}%</td></tr>`;
+            });
+
+            html += '</tbody></table>';
+            document.getElementById('commonWords').innerHTML = html;
+        }
+
+        function exportStats() {
+            const text = document.getElementById('inputText').value;
+            if (!text.trim()) {
+                showAlert('No text to export stats for!', 'warning');
+                return;
+            }
+
+            const stats = {
+                'Characters (with spaces)': document.getElementById('charWithSpaces').textContent,
+                'Characters (without spaces)': document.getElementById('charWithoutSpaces').textContent,
+                'Words': document.getElementById('wordCount').textContent,
+                'Sentences': document.getElementById('sentenceCount').textContent,
+                'Paragraphs': document.getElementById('paragraphCount').textContent,
+                'Lines': document.getElementById('lineCount').textContent,
+                'Reading Time': document.getElementById('readingTime').textContent,
+                'Speaking Time': document.getElementById('speakingTime').textContent,
+                'Average Word Length': document.getElementById('avgWordLength').textContent,
+                'Longest Word': document.getElementById('longestWord').textContent,
+                'Shortest Word': document.getElementById('shortestWord').textContent
+            };
+
+            let exportText = 'TEXT ANALYSIS REPORT\n';
+            exportText += '===================\n\n';
+            exportText += `Generated: ${new Date().toLocaleString()}\n\n`;
+
+            for (const [key, value] of Object.entries(stats)) {
+                exportText += `${key}: ${value}\n`;
+            }
+
+            // Create and download file
+            const blob = new Blob([exportText], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'text-analysis-report.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showAlert('Stats exported successfully!', 'success');
+        }
+
+        // Real-time analysis on input
+        document.getElementById('inputText').addEventListener('input', analyzeText);
+    </script>
+}

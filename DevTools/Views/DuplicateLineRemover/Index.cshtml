@@ -1,0 +1,526 @@
+﻿@{
+    ViewData["Title"] = "Duplicate Line Remover";
+}
+
+<div class="container">
+    <div class="tool-header">
+        <h1 class="tool-title">Duplicate Line Remover</h1>
+        <p class="tool-description">
+            Remove duplicate lines from your text while preserving the original order or sorting alphabetically.
+        </p>
+    </div>
+
+    <div class="tab-container">
+        <div class="tab-nav">
+            <button class="tab-button active" data-tab="remove-duplicates">Remove Duplicates</button>
+            <button class="tab-button" data-tab="find-duplicates">Find Duplicates</button>
+            <button class="tab-button" data-tab="compare-lists">Compare Lists</button>
+        </div>
+
+        <!-- Remove Duplicates Tab -->
+        <div class="tab-content" id="remove-duplicates">
+            <div class="form-group">
+                
+                <div class="form-control-container">
+                    <div class="form-control-header">
+                        <span>Input</span>
+                        <button type="button" class="btn btn-secondary ml-auto" onclick="clearInput('removeInput')">Clear</button>
+                    </div>
+                    <textarea class="form-control" id="removeInput" placeholder="Enter your text here, each line will be processed separately..."></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="feature-grid" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                    <label class="form-control">
+                        <input type="checkbox" id="caseSensitive"> Case Sensitive
+                    </label>
+                    <label class="form-control">
+                        <input type="checkbox" id="trimWhitespace" checked> Trim Whitespace
+                    </label>
+                    <label class="form-control">
+                        <input type="checkbox" id="ignoreEmpty" checked> Ignore Empty Lines
+                    </label>
+                    <label class="form-control">
+                        <input type="checkbox" id="sortOutput"> Sort Output
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="removeDuplicates()">
+                    <span class="loading-spinner" id="removeSpinner" style="display: none;"></span>
+                    Remove Duplicates
+                </button>
+                <button type="button" class="btn btn-secondary ml-auto" onclick="swapTexts()">
+                    Swap Input ↔ Output
+                </button>
+            </div>
+
+            <div class="results-container" id="removeResults" style="display: none;">
+                <div class="results-header">
+                    <span>Cleaned Text</span>
+                    <div>
+                        <button type="button" class="btn btn-secondary ml-auto" onclick="copyToClipboard('removeOutput')">Copy</button>
+                        <button type="button" class="btn btn-secondary ml-auto" onclick="downloadResult('removeOutput', 'cleaned-text.txt')">Download</button>
+                    </div>
+                </div>
+                <div class="results-content">
+                    <pre class="form-control" id="removeOutput"></pre>
+                </div>
+            </div>
+
+            <div class="results-container" id="removeStats" style="display: none;">
+                <div class="results-header">
+                    <span>Statistics</span>
+                </div>
+                <div class="results-content">
+                    <table class="results-table">
+                        <tr>
+                            <td>Original Lines</td>
+                            <td id="originalCount">0</td>
+                        </tr>
+                        <tr>
+                            <td>Unique Lines</td>
+                            <td id="uniqueCount">0</td>
+                        </tr>
+                        <tr>
+                            <td>Duplicate Lines Removed</td>
+                            <td id="duplicateCount">0</td>
+                        </tr>
+                        <tr>
+                            <td>Reduction Percentage</td>
+                            <td id="reductionPercent">0%</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Find Duplicates Tab -->
+        <div class="tab-content" id="find-duplicates" style="display: none;">
+            <div class="form-group">
+                
+                <div class="form-control-container">
+                    <div class="form-control-header">
+                        <span>Input</span>
+                        <button type="button" class="btn btn-secondary ml-auto" onclick="clearInput('findInput')">Clear</button>
+                    </div>
+                    <textarea class="form-control" id="findInput" placeholder="Enter your text to find duplicate lines..."></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="findDuplicates()">
+                    <span class="loading-spinner" id="findSpinner" style="display: none;"></span>
+                    Find Duplicates
+                </button>
+            </div>
+
+            <div class="results-container" id="findResults" style="display: none;">
+                <div class="results-header">
+                    <span>Duplicate Lines Found</span>
+                    <button type="button" class="btn btn-secondary ml-auto" onclick="copyToClipboard('findOutput')">Copy</button>
+                </div>
+                <div class="results-content">
+                    <div id="findOutput"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compare Lists Tab -->
+        <div class="tab-content" id="compare-lists" style="display: none;">
+            <div class="feature-grid">
+                <div class="form-group">
+                    
+                    <div class="form-control-container">
+                        <div class="form-control-header">
+                            <span>First List</span>
+                            <button type="button" class="btn btn-secondary ml-auto" onclick="clearInput('listA')">Clear</button>
+                        </div>
+                        <textarea class="form-control" id="listA" placeholder="Enter first list..."></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    
+                    <div class="form-control-container">
+                        <div class="form-control-header">
+                            <span>Second List</span>
+                            <button type="button" class="btn btn-secondary ml-auto" onclick="clearInput('listB')">Clear</button>
+                        </div>
+                        <textarea class="form-control" id="listB" placeholder="Enter second list..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="compareLists()">
+                    <span class="loading-spinner" id="compareSpinner" style="display: none;"></span>
+                    Compare Lists
+                </button>
+            </div>
+
+            <div class="results-container" id="compareResults" style="display: none;">
+                <div class="results-header">
+                    <span>Comparison Results</span>
+                </div>
+                <div class="results-content">
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h3>Common Lines</h3>
+                            <div id="commonLines">
+                                <p>Lines that appear in both lists...</p>
+                            </div>
+                            <button type="button" class="btn btn-secondary" onclick="copyToClipboard('commonLines')">Copy</button>
+                        </div>
+
+                        <div class="feature-card">
+                            <h3>Only in List A</h3>
+                            <div id="onlyInA">
+                                <p>Lines that appear only in the first list...</p>
+                            </div>
+                            <button type="button" class="btn btn-secondary" onclick="copyToClipboard('onlyInA')">Copy</button>
+                        </div>
+
+                        <div class="feature-card">
+                            <h3>Only in List B</h3>
+                            <div id="onlyInB">
+                                <p>Lines that appear only in the second list...</p>
+                            </div>
+                            <button type="button" class="btn btn-secondary" onclick="copyToClipboard('onlyInB')">Copy</button>
+                        </div>
+
+                        <div class="feature-card">
+                            <h3>📈 Statistics</h3>
+                            <table class="results-table">
+                                <tr>
+                                    <td>List A Lines</td>
+                                    <td id="listACount">0</td>
+                                </tr>
+                                <tr>
+                                    <td>List B Lines</td>
+                                    <td id="listBCount">0</td>
+                                </tr>
+                                <tr>
+                                    <td>Common Lines</td>
+                                    <td id="commonCount">0</td>
+                                </tr>
+                                <tr>
+                                    <td>Unique to A</td>
+                                    <td id="uniqueACount">0</td>
+                                </tr>
+                                <tr>
+                                    <td>Unique to B</td>
+                                    <td id="uniqueBCount">0</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="alertContainer"></div>
+</div>
+
+@section Scripts {
+    <script>
+        // Tab functionality
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+                this.classList.add('active');
+                document.getElementById(tabId).style.display = 'block';
+            });
+        });
+
+        function showLoading(id, show) {
+            document.getElementById(id).style.display = show ? 'inline-block' : 'none';
+        }
+
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.innerHTML = `<i class="fas fa-${getAlertIcon(type)}"></i> ${message}`;
+            alertContainer.appendChild(alert);
+            setTimeout(() => alert.remove(), 4000);
+        }
+
+        function getAlertIcon(type) {
+            const icons = {
+                'success': 'check-circle',
+                'error': 'exclamation-circle',
+                'warning': 'exclamation-triangle',
+                'info': 'info-circle'
+            };
+            return icons[type] || 'info-circle';
+        }
+
+        function clearInput(id) {
+            document.getElementById(id).value = '';
+            if (id === 'removeInput') {
+                document.getElementById('removeResults').style.display = 'none';
+                document.getElementById('removeStats').style.display = 'none';
+            } else if (id === 'findInput') {
+                document.getElementById('findResults').style.display = 'none';
+            }
+        }
+
+        async function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            let textToCopy = '';
+
+            if (element.tagName === 'PRE') {
+                textToCopy = element.textContent;
+            } else {
+                textToCopy = element.innerText || element.textContent;
+            }
+
+            try {
+                await navigator.clipboard.writeText(textToCopy);
+                showAlert('Copied to clipboard!', 'success');
+            } catch {
+                showAlert('Failed to copy to clipboard!', 'error');
+            }
+        }
+
+        function downloadResult(elementId, filename) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+
+            if (!text.trim()) {
+                showAlert('No content to download!', 'warning');
+                return;
+            }
+
+            const blob = new Blob([text], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+
+            showAlert('File downloaded successfully!', 'success');
+        }
+
+        function processLines(text, options = {}) {
+            let lines = text.split('\n');
+
+            if (options.trimWhitespace) {
+                lines = lines.map(line => line.trim());
+            }
+
+            if (options.ignoreEmpty) {
+                lines = lines.filter(line => line.length > 0);
+            }
+
+            if (!options.caseSensitive) {
+                // For comparison, but keep original case in results
+                return lines;
+            }
+
+            return lines;
+        }
+
+        function removeDuplicates() {
+            const input = document.getElementById('removeInput').value;
+
+            if (!input.trim()) {
+                showAlert('Please enter some text to process.', 'warning');
+                return;
+            }
+
+            showLoading('removeSpinner', true);
+
+            setTimeout(() => {
+                const caseSensitive = document.getElementById('caseSensitive').checked;
+                const trimWhitespace = document.getElementById('trimWhitespace').checked;
+                const ignoreEmpty = document.getElementById('ignoreEmpty').checked;
+                const sortOutput = document.getElementById('sortOutput').checked;
+
+                let lines = processLines(input, { trimWhitespace, ignoreEmpty });
+                const originalCount = lines.length;
+
+                // Remove duplicates while preserving original case
+                const seen = new Set();
+                const uniqueLines = [];
+
+                lines.forEach(line => {
+                    const compareKey = caseSensitive ? line : line.toLowerCase();
+                    if (!seen.has(compareKey)) {
+                        seen.add(compareKey);
+                        uniqueLines.push(line);
+                    }
+                });
+
+                let result = uniqueLines;
+                if (sortOutput) {
+                    result = [...uniqueLines].sort(caseSensitive ? undefined : (a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+                }
+
+                const uniqueCount = result.length;
+                const duplicateCount = originalCount - uniqueCount;
+                const reductionPercent = originalCount > 0 ? ((duplicateCount / originalCount) * 100).toFixed(1) : 0;
+
+                document.getElementById('removeOutput').textContent = result.join('\n');
+                document.getElementById('originalCount').textContent = originalCount.toLocaleString();
+                document.getElementById('uniqueCount').textContent = uniqueCount.toLocaleString();
+                document.getElementById('duplicateCount').textContent = duplicateCount.toLocaleString();
+                document.getElementById('reductionPercent').textContent = reductionPercent + '%';
+
+                document.getElementById('removeResults').style.display = 'block';
+                document.getElementById('removeStats').style.display = 'block';
+
+                showLoading('removeSpinner', false);
+                showAlert(`Removed ${duplicateCount} duplicate lines!`, 'success');
+            }, 300);
+        }
+
+        function swapTexts() {
+            const input = document.getElementById('removeInput');
+            const output = document.getElementById('removeOutput');
+
+            if (!output.textContent.trim()) {
+                showAlert('No output to swap!', 'warning');
+                return;
+            }
+
+            const temp = input.value;
+            input.value = output.textContent;
+            output.textContent = temp;
+
+            showAlert('Input and output swapped!', 'success');
+        }
+
+        function findDuplicates() {
+            const input = document.getElementById('findInput').value;
+
+            if (!input.trim()) {
+                showAlert('Please enter some text to analyze.', 'warning');
+                return;
+            }
+
+            showLoading('findSpinner', true);
+
+            setTimeout(() => {
+                const lines = input.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+                const lineCount = {};
+                const duplicates = {};
+
+                // Count occurrences
+                lines.forEach((line, index) => {
+                    const key = line.toLowerCase();
+                    if (!lineCount[key]) {
+                        lineCount[key] = { count: 0, original: line, indices: [] };
+                    }
+                    lineCount[key].count++;
+                    lineCount[key].indices.push(index + 1);
+                });
+
+                // Find duplicates
+                Object.entries(lineCount).forEach(([key, data]) => {
+                    if (data.count > 1) {
+                        duplicates[key] = data;
+                    }
+                });
+
+                let html = '';
+                if (Object.keys(duplicates).length === 0) {
+                    html = '<p>No duplicate lines found!</p>';
+                } else {
+                    html = '<table class="results-table"><thead><tr><th>Line</th><th>Count</th><th>Line Numbers</th></tr></thead><tbody>';
+                    Object.entries(duplicates)
+                        .sort((a, b) => b[1].count - a[1].count)
+                        .forEach(([key, data]) => {
+                            html += `<tr>
+                                <td><code>${data.original}</code></td>
+                                <td>${data.count}</td>
+                                <td>${data.indices.join(', ')}</td>
+                            </tr>`;
+                        });
+                    html += '</tbody></table>';
+                }
+
+                document.getElementById('findOutput').innerHTML = html;
+                document.getElementById('findResults').style.display = 'block';
+
+                showLoading('findSpinner', false);
+                const duplicateCount = Object.keys(duplicates).length;
+                showAlert(`Found ${duplicateCount} duplicate line(s)!`, duplicateCount > 0 ? 'warning' : 'success');
+            }, 300);
+        }
+
+        function compareLists() {
+            const listAText = document.getElementById('listA').value;
+            const listBText = document.getElementById('listB').value;
+
+            if (!listAText.trim() || !listBText.trim()) {
+                showAlert('Please enter both lists to compare.', 'warning');
+                return;
+            }
+
+            showLoading('compareSpinner', true);
+
+            setTimeout(() => {
+                const linesA = listAText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+                const linesB = listBText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+
+                const setA = new Set(linesA.map(line => line.toLowerCase()));
+                const setB = new Set(linesB.map(line => line.toLowerCase()));
+
+                const common = [];
+                const onlyA = [];
+                const onlyB = [];
+
+                // Find common and unique to A
+                linesA.forEach(line => {
+                    const lowerLine = line.toLowerCase();
+                    if (setB.has(lowerLine)) {
+                        if (!common.some(c => c.toLowerCase() === lowerLine)) {
+                            common.push(line);
+                        }
+                    } else {
+                        onlyA.push(line);
+                    }
+                });
+
+                // Find unique to B
+                linesB.forEach(line => {
+                    const lowerLine = line.toLowerCase();
+                    if (!setA.has(lowerLine)) {
+                        onlyB.push(line);
+                    }
+                });
+
+                // Update UI
+                document.getElementById('commonLines').innerHTML = common.length > 0 ?
+                    `<pre class="form-control">${common.join('\n')}</pre>` : '<p>No common lines found.</p>';
+
+                document.getElementById('onlyInA').innerHTML = onlyA.length > 0 ?
+                    `<pre class="form-control">${onlyA.join('\n')}</pre>` : '<p>No unique lines in List A.</p>';
+
+                document.getElementById('onlyInB').innerHTML = onlyB.length > 0 ?
+                    `<pre class="form-control">${onlyB.join('\n')}</pre>` : '<p>No unique lines in List B.</p>';
+
+                document.getElementById('listACount').textContent = linesA.length.toLocaleString();
+                document.getElementById('listBCount').textContent = linesB.length.toLocaleString();
+                document.getElementById('commonCount').textContent = common.length.toLocaleString();
+                document.getElementById('uniqueACount').textContent = onlyA.length.toLocaleString();
+                document.getElementById('uniqueBCount').textContent = onlyB.length.toLocaleString();
+
+                document.getElementById('compareResults').style.display = 'block';
+
+                showLoading('compareSpinner', false);
+                showAlert('Lists compared successfully!', 'success');
+            }, 300);
+        }
+    </script>
+}
