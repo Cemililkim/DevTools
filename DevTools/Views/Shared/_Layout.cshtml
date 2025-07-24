@@ -10,8 +10,183 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/DevTools.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+
+    <style>
+        /* Mobile Block Overlay */
+        .mobile-block-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(135deg, var(--bg-primary, #11121a) 0%, var(--bg-secondary, #13141c) 100%);
+            z-index: 10000;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .mobile-block-content {
+            max-width: 400px;
+            background: var(--bg-card, #1a1b26);
+            padding: 40px 30px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color, #2a2b3a);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .mobile-block-icon {
+            font-size: 4rem;
+            color: var(--accent-primary, #7c3aed);
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        .mobile-block-title {
+            background: linear-gradient(120deg, var(--accent-primary, #7c3aed), var(--accent-secondary, #06ffa5));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        .mobile-block-message {
+            color: var(--text-secondary, #a1a1aa);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .mobile-block-features {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+            .mobile-block-features li {
+                color: var(--text-secondary, #a1a1aa);
+                margin: 12px 0;
+                display: flex;
+                align-items: center;
+                font-size: 0.9rem;
+            }
+
+                .mobile-block-features li i {
+                    color: var(--accent-secondary, #06ffa5);
+                    margin-right: 12px;
+                    width: 20px;
+                    flex-shrink: 0;
+                }
+
+        .desktop-hint {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(124, 58, 237, 0.1);
+            border: 1px solid var(--accent-primary, #7c3aed);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--accent-primary, #7c3aed);
+        }
+
+        @@keyframes pulse {
+            0%, 100%
+
+        {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.1);
+            opacity: 0.8;
+        }
+
+        }
+
+        /* Hide main content on mobile */
+        @@media (max-width: 768px) {
+            .mobile-block-overlay
+
+        {
+            display: flex !important;
+        }
+
+        body > header,
+        body > .container,
+        body > main {
+            display: none !important;
+        }
+
+        }
+
+        @@media (max-width: 480px) {
+            .mobile-block-content
+
+        {
+            padding: 30px 20px;
+            margin: 0 10px;
+        }
+
+        .mobile-block-title {
+            font-size: 1.5rem;
+        }
+
+        .mobile-block-icon {
+            font-size: 3rem;
+        }
+
+        }
+    </style>
 </head>
 <body>
+    <!-- Mobile Block Overlay -->
+    <div class="mobile-block-overlay">
+        <div class="mobile-block-content">
+            <div class="mobile-block-icon">
+                <i class="bi bi-display"></i>
+            </div>
+            <h1 class="mobile-block-title">Desktop Experience Required</h1>
+            <p class="mobile-block-message">
+                Please access our DevTools suite on a desktop or laptop computer for the best experience.
+            </p>
+
+            <ul class="mobile-block-features">
+                <li>
+                    <i class="bi bi-tools"></i>
+                    Professional development tools
+                </li>
+                <li>
+                    <i class="bi bi-code-slash"></i>
+                    Advanced code formatting
+                </li>
+                <li>
+                    <i class="bi bi-table"></i>
+                    Complex data manipulation
+                </li>
+                <li>
+                    <i class="bi bi-lightning-charge"></i>
+                    High-performance processing
+                </li>
+                <li>
+                    <i class="bi bi-shield-check"></i>
+                    Secure local operations
+                </li>
+            </ul>
+
+            <div class="desktop-hint">
+                <i class="bi bi-info-circle"></i>
+                Our tools are optimized for desktop browsers with larger screens and full keyboard support.
+            </div>
+        </div>
+    </div>
+
+    <!-- Desktop Content -->
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm mb-3">
             <div class="container-fluid">
@@ -44,7 +219,7 @@
                                 </li>
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" asp-controller="JsonTo" asp-action="Index">
-                                        <i class="bi bi-filetype-json me-2"></i> JSON conversionter
+                                        <i class="bi bi-filetype-json me-2"></i> JSON Converter
                                     </a>
                                 </li>
                                 <li>
@@ -107,7 +282,7 @@
                                 </li>
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" asp-controller="SmtpTester" asp-action="Index">
-                                        <i class="bi bi-envelope-at-fill"></i> Smtp Tester
+                                        <i class="bi bi-envelope-at-fill"></i> SMTP Tester
                                     </a>
                                 </li>
                             </ul>
@@ -181,6 +356,45 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Mobile Detection Script -->
+    <script>
+        // Additional mobile detection for more precise control
+        function isMobileDevice() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+                || window.innerWidth <= 768
+                || (window.orientation !== undefined);
+        }
+
+        // Show/hide mobile block based on device and screen size
+        function checkDevice() {
+            const mobileBlock = document.querySelector('.mobile-block-overlay');
+            const mainContent = document.querySelectorAll('body > header, body > .container, body > main');
+
+            if (isMobileDevice()) {
+                if (mobileBlock) {
+                    mobileBlock.style.display = 'flex';
+                }
+                mainContent.forEach(element => {
+                    if (element) element.style.display = 'none';
+                });
+            } else {
+                if (mobileBlock) {
+                    mobileBlock.style.display = 'none';
+                }
+                mainContent.forEach(element => {
+                    if (element) element.style.display = '';
+                });
+            }
+        }
+
+        // Check on load and resize
+        document.addEventListener('DOMContentLoaded', checkDevice);
+        window.addEventListener('resize', checkDevice);
+        window.addEventListener('orientationchange', function() {
+            setTimeout(checkDevice, 100);
+        });
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
