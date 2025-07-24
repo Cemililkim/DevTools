@@ -20,12 +20,12 @@
         <div class="tab-content" id="url-encode">
             <div class="form-group">
                 <label class="form-label">Text to Encode:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>Input</span>
                         <button class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('encodeUrlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="encodeUrlInput" placeholder="https://example.com/query?name=John Doe&age=25"></textarea>
+                    <textarea class="form-control" id="encodeUrlInput" placeholder="https://example.com/query?name=John Doe&age=25"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -40,7 +40,7 @@
                     <button class="btn btn-secondary btn-sm" onclick="copyToClipboard('encodeUrlOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="encodeUrlOutput"></pre>
+                    <pre class="form-control" id="encodeUrlOutput"></pre>
                 </div>
             </div>
         </div>
@@ -49,12 +49,12 @@
         <div class="tab-content" id="url-decode" style="display: none;">
             <div class="form-group">
                 <label class="form-label">URL to Decode:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>Input</span>
                         <button class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('decodeUrlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="decodeUrlInput" placeholder="https%3A%2F%2Fexample.com%2Fquery%3Fname%3DJohn%20Doe%26age%3D25"></textarea>
+                    <textarea class="form-control" id="decodeUrlInput" placeholder="https%3A%2F%2Fexample.com%2Fquery%3Fname%3DJohn%20Doe%26age%3D25"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -69,7 +69,7 @@
                     <button class="btn btn-secondary btn-sm" onclick="copyToClipboard('decodeUrlOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="decodeUrlOutput"></pre>
+                    <pre class="form-control" id="decodeUrlOutput"></pre>
                 </div>
             </div>
         </div>

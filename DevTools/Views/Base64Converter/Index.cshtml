@@ -20,12 +20,12 @@
         <div class="tab-content" id="base64-encode">
             <div class="form-group">
                 <label class="form-label">Text to Encode:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('encodeInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="encodeInput" placeholder="Hello, World!"></textarea>
+                    <textarea class="form-control" id="encodeInput" placeholder="Hello, World!"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -40,7 +40,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('encodeOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="encodeOutput"></pre>
+                    <pre class="form-control" id="encodeOutput"></pre>
                 </div>
             </div>
         </div>
@@ -49,12 +49,12 @@
         <div class="tab-content" id="base64-decode" style="display: none;">
             <div class="form-group">
                 <label class="form-label">Base64 to Decode:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('decodeInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="decodeInput" placeholder="SGVsbG8sIFdvcmxkIQ=="></textarea>
+                    <textarea class="form-control" id="decodeInput" placeholder="SGVsbG8sIFdvcmxkIQ=="></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -69,7 +69,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('decodeOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="decodeOutput"></pre>
+                    <pre class="form-control" id="decodeOutput"></pre>
                 </div>
             </div>
         </div>

@@ -5,26 +5,84 @@
 <div class="container">
     <div class="tool-header">
         <h1 class="tool-title">Diff Checker</h1>
-        <p class="tool-description">Paste two texts below and check their differences!</p>
+        <p class="tool-description">Paste two texts below and check their differences or compare line-by-line!</p>
     </div>
 
-    <div class="form-group">
-        <label for="textA" class="form-label">Text A:</label>
-        <textarea id="textA" class="form-control" rows="8"></textarea>
-    </div>
+    <div class="tab-container">
+        <div class="tab-nav">
+            <button class="tab-button active" data-tab="text-diff">Text Diff</button>
+            <button class="tab-button" data-tab="list-compare">List Compare</button>
+        </div>
 
-    <div class="form-group">
-        <label for="textB" class="form-label">Text B:</label>
-        <textarea id="textB" class="form-control" rows="8"></textarea>
-    </div>
+        <!-- TEXT DIFF TAB -->
+        <div class="tab-content" id="text-diff">
+            <div class="form-group">
+                <label for="textA" class="form-label">Text A:</label>
+                <textarea id="textA" class="form-control" rows="8" placeholder="Welcome To DevTools"></textarea>
+            </div>
 
-    <div class="form-group">
-        <button class="btn btn-primary" onclick="compareTexts()">Compare</button>
-    </div>
+            <div class="form-group">
+                <label for="textB" class="form-label">Text B:</label>
+                <textarea id="textB" class="form-control" rows="8" placeholder="I Love DevTools"></textarea>
+            </div>
 
-    <div id="diffResultContainer" style="display: none;">
-        <label class="form-label">Differences:</label>
-        <div id="diffResult" class="p-3" style="border: 1px solid transparent; border-image: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); border-image-slice: 1; font-size: 1.2em; user-select: all;"></div>
+            <div class="form-group">
+                <button class="btn btn-primary" onclick="compareTexts()">Compare</button>
+            </div>
+
+            <div id="diffResultContainer" style="display: none;">
+                <label class="form-label">Differences:</label>
+                <div id="diffResult" class="p-3" style="border: 1px solid transparent; border-image: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary)); border-image-slice: 1; font-size: 1.2em; user-select: all;"></div>
+            </div>
+        </div>
+
+        <!-- LIST COMPARE TAB -->
+        <div class="tab-content" id="list-compare" style="display: none;">
+            <div class="feature-grid">
+                <div class="form-group">
+                    <label class="form-label">List A:</label>
+                    <textarea class="form-control" id="listA" rows="8" placeholder="Enter first list..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">List B:</label>
+                    <textarea class="form-control" id="listB" rows="8" placeholder="Enter second list..."></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="button" class="btn btn-primary" onclick="compareLists()">Compare Lists</button>
+            </div>
+
+            <div class="results-container" id="compareResults" style="display: none;">
+                <div class="results-header"><span>Comparison Results</span></div>
+                <div class="results-content">
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h3>Common Lines</h3>
+                            <div id="commonLines"><p>Lines that appear in both lists...</p></div>
+                        </div>
+                        <div class="feature-card">
+                            <h3>Only in List A</h3>
+                            <div id="onlyInA"><p>Lines that appear only in the first list...</p></div>
+                        </div>
+                        <div class="feature-card">
+                            <h3>Only in List B</h3>
+                            <div id="onlyInB"><p>Lines that appear only in the second list...</p></div>
+                        </div>
+                        <div class="feature-card">
+                            <h3>Statistics</h3>
+                            <table class="results-table">
+                                <tr><td>List A Lines</td><td id="listACount">0</td></tr>
+                                <tr><td>List B Lines</td><td id="listBCount">0</td></tr>
+                                <tr><td>Common Lines</td><td id="commonCount">0</td></tr>
+                                <tr><td>Unique to A</td><td id="uniqueACount">0</td></tr>
+                                <tr><td>Unique to B</td><td id="uniqueBCount">0</td></tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div id="alertContainer"></div>
@@ -33,22 +91,37 @@
 @section Scripts {
     <script src="https://unpkg.com/diff-match-patch/index.js"></script>
     <script>
+        function showAlert(message, type = 'error') {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${type}`;
+            alert.textContent = message;
+            alertContainer.appendChild(alert);
+            setTimeout(() => alert.remove(), 4000);
+        }
+
+        // Tab Switch
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function () {
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.style.display = 'none');
+                this.classList.add('active');
+                document.getElementById(tabId).style.display = 'block';
+            });
+        });
+
+        // TEXT DIFF
         function diffWords(a, b) {
             const dmp = new diff_match_patch();
             const diff = dmp.diff_main(a, b);
             dmp.diff_cleanupSemantic(diff);
 
-            const result = diff.map(([op, data]) => {
-                if (op === 0) {
-                    return `<span>${data}</span>`;
-                } else if (op === -1) {
-                    return `<span style="background-color:#ffe0e0; color: red;">- ${data}</span>`;
-                } else if (op === 1) {
-                    return `<span style="background-color:#d0ffd0; color: green;">+ ${data}</span>`;
-                }
+            return diff.map(([op, data]) => {
+                if (op === 0) return `<span>${data}</span>`;
+                if (op === -1) return `<span style="background-color:#ffe0e0; color: red;">- ${data}</span>`;
+                if (op === 1) return `<span style="background-color:#d0ffd0; color: green;">+ ${data}</span>`;
             }).join(' ');
-
-            return result;
         }
 
         function compareTexts() {
@@ -56,7 +129,7 @@
             const textB = document.getElementById('textB').value.trim();
 
             if (!textA || !textB) {
-                showAlert("Both texts must be filled!");
+                showAlert("Both texts must be filled!", "error");
                 return;
             }
 
@@ -64,6 +137,59 @@
             document.getElementById('diffResult').innerHTML = result;
             document.getElementById('diffResultContainer').style.display = 'block';
         }
-    </script>
 
+        // LIST COMPARE
+        function compareLists() {
+            const listAText = document.getElementById('listA').value;
+            const listBText = document.getElementById('listB').value;
+
+            if (!listAText.trim() || !listBText.trim()) {
+                showAlert('Please enter both lists to compare.', "error");
+                return;
+            }
+
+            const linesA = listAText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+            const linesB = listBText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+
+            const setA = new Set(linesA.map(line => line.toLowerCase()));
+            const setB = new Set(linesB.map(line => line.toLowerCase()));
+
+            const common = [];
+            const onlyA = [];
+            const onlyB = [];
+
+            linesA.forEach(line => {
+                const lower = line.toLowerCase();
+                if (setB.has(lower)) {
+                    if (!common.some(x => x.toLowerCase() === lower)) {
+                        common.push(line);
+                    }
+                } else {
+                    onlyA.push(line);
+                }
+            });
+
+            linesB.forEach(line => {
+                const lower = line.toLowerCase();
+                if (!setA.has(lower)) {
+                    onlyB.push(line);
+                }
+            });
+
+            document.getElementById('commonLines').innerHTML = common.length > 0 ?
+                `<pre class="form-control">${common.join('\n')}</pre>` : '<p>No common lines found.</p>';
+            document.getElementById('onlyInA').innerHTML = onlyA.length > 0 ?
+                `<pre class="form-control">${onlyA.join('\n')}</pre>` : '<p>No unique lines in List A.</p>';
+            document.getElementById('onlyInB').innerHTML = onlyB.length > 0 ?
+                `<pre class="form-control">${onlyB.join('\n')}</pre>` : '<p>No unique lines in List B.</p>';
+
+            document.getElementById('listACount').textContent = linesA.length.toLocaleString();
+            document.getElementById('listBCount').textContent = linesB.length.toLocaleString();
+            document.getElementById('commonCount').textContent = common.length.toLocaleString();
+            document.getElementById('uniqueACount').textContent = onlyA.length.toLocaleString();
+            document.getElementById('uniqueBCount').textContent = onlyB.length.toLocaleString();
+
+            document.getElementById('compareResults').style.display = 'block';
+        }
+    </script>
 }

@@ -23,12 +23,12 @@
         <div class="tab-content" id="csv-to-json">
             <div class="form-group">
                 <label class="form-label">CSV Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>CSV Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('csvToJsonInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="csvToJsonInput" placeholder="name,age,city&#10;John,25,New York&#10;Jane,30,London"></textarea>
+                    <textarea class="form-control" id="csvToJsonInput" placeholder="name,age,city&#10;John,25,New York&#10;Jane,30,London"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -43,7 +43,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('jsonOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="jsonOutput"></pre>
+                    <pre class="form-control" id="jsonOutput"></pre>
                 </div>
             </div>
         </div>
@@ -52,12 +52,12 @@
         <div class="tab-content" id="csv-to-xml" style="display: none;">
             <div class="form-group">
                 <label class="form-label">CSV Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>CSV Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('csvToXmlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="csvToXmlInput" placeholder="product,price,stock&#10;Laptop,999.99,15&#10;Mouse,29.99,50"></textarea>
+                    <textarea class="form-control" id="csvToXmlInput" placeholder="product,price,stock&#10;Laptop,999.99,15&#10;Mouse,29.99,50"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -72,7 +72,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('xmlOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="xmlOutput"></pre>
+                    <pre class="form-control" id="xmlOutput"></pre>
                 </div>
             </div>
         </div>
@@ -81,12 +81,12 @@
         <div class="tab-content" id="csv-to-yaml" style="display: none;">
             <div class="form-group">
                 <label class="form-label">CSV Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>CSV Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('csvToYamlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="csvToYamlInput" placeholder="server,port,ssl&#10;localhost,8080,true&#10;remote,443,true"></textarea>
+                    <textarea class="form-control" id="csvToYamlInput" placeholder="server,port,ssl&#10;localhost,8080,true&#10;remote,443,true"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -101,7 +101,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('yamlOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="yamlOutput"></pre>
+                    <pre class="form-control" id="yamlOutput"></pre>
                 </div>
             </div>
         </div>
@@ -110,12 +110,12 @@
         <div class="tab-content" id="csv-to-html" style="display: none;">
             <div class="form-group">
                 <label class="form-label">CSV Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>CSV Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('csvToHtmlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="csvToHtmlInput" placeholder="name,department,salary&#10;John Doe,Engineering,75000&#10;Jane Smith,Marketing,65000"></textarea>
+                    <textarea class="form-control" id="csvToHtmlInput" placeholder="name,department,salary&#10;John Doe,Engineering,75000&#10;Jane Smith,Marketing,65000"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -133,7 +133,7 @@
                     <div class="html-preview" id="htmlPreview"></div>
                     <details style="margin-top: 10px;">
                         <summary style="cursor: pointer; font-weight: bold;">View HTML Source</summary>
-                        <pre class="code-editor" id="htmlOutput" style="margin-top: 10px;"></pre>
+                        <pre class="form-control" id="htmlOutput" style="margin-top: 10px;"></pre>
                     </details>
                 </div>
             </div>
@@ -143,12 +143,12 @@
         <div class="tab-content" id="format-csv" style="display: none;">
             <div class="form-group">
                 <label class="form-label">CSV Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>CSV Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('formatCsvInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="formatCsvInput" placeholder="  name  , age,   city  &#10; John , 25,  New York &#10; Jane,30, London   "></textarea>
+                    <textarea class="form-control" id="formatCsvInput" placeholder="  name  , age,   city  &#10; John , 25,  New York &#10; Jane,30, London   "></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -163,7 +163,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('formatOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="formatOutput"></pre>
+                    <pre class="form-control" id="formatOutput"></pre>
                 </div>
             </div>
         </div>

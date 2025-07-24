@@ -23,12 +23,12 @@
         <div class="tab-content" id="xml-to-json">
             <div class="form-group">
                 <label class="form-label">XML Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>XML Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('xmlToJsonInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="xmlToJsonInput" placeholder="&lt;root&gt;&#10;  &lt;person id=&quot;1&quot;&gt;&#10;    &lt;name&gt;John&lt;/name&gt;&#10;    &lt;age&gt;25&lt;/age&gt;&#10;  &lt;/person&gt;&#10;&lt;/root&gt;"></textarea>
+                    <textarea class="form-control" id="xmlToJsonInput" placeholder="&lt;root&gt;&#10;  &lt;person id=&quot;1&quot;&gt;&#10;    &lt;name&gt;John&lt;/name&gt;&#10;    &lt;age&gt;25&lt;/age&gt;&#10;  &lt;/person&gt;&#10;&lt;/root&gt;"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -43,7 +43,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('jsonOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="jsonOutput"></pre>
+                    <pre class="form-control" id="jsonOutput"></pre>
                 </div>
             </div>
         </div>
@@ -52,12 +52,12 @@
         <div class="tab-content" id="xml-to-csv" style="display: none;">
             <div class="form-group">
                 <label class="form-label">XML Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>XML Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('xmlToCsvInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="xmlToCsvInput" placeholder="&lt;products&gt;&#10;  &lt;product&gt;&#10;    &lt;name&gt;Laptop&lt;/name&gt;&#10;    &lt;price&gt;999.99&lt;/price&gt;&#10;    &lt;stock&gt;15&lt;/stock&gt;&#10;  &lt;/product&gt;&#10;  &lt;product&gt;&#10;    &lt;name&gt;Mouse&lt;/name&gt;&#10;    &lt;price&gt;29.99&lt;/price&gt;&#10;    &lt;stock&gt;50&lt;/stock&gt;&#10;  &lt;/product&gt;&#10;&lt;/products&gt;"></textarea>
+                    <textarea class="form-control" id="xmlToCsvInput" placeholder="&lt;products&gt;&#10;  &lt;product&gt;&#10;    &lt;name&gt;Laptop&lt;/name&gt;&#10;    &lt;price&gt;999.99&lt;/price&gt;&#10;    &lt;stock&gt;15&lt;/stock&gt;&#10;  &lt;/product&gt;&#10;  &lt;product&gt;&#10;    &lt;name&gt;Mouse&lt;/name&gt;&#10;    &lt;price&gt;29.99&lt;/price&gt;&#10;    &lt;stock&gt;50&lt;/stock&gt;&#10;  &lt;/product&gt;&#10;&lt;/products&gt;"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -72,7 +72,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('csvOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="csvOutput"></pre>
+                    <pre class="form-control" id="csvOutput"></pre>
                 </div>
             </div>
         </div>
@@ -81,12 +81,12 @@
         <div class="tab-content" id="xml-to-yaml" style="display: none;">
             <div class="form-group">
                 <label class="form-label">XML Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>XML Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('xmlToYamlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="xmlToYamlInput" placeholder="&lt;config&gt;&#10;  &lt;server port=&quot;8080&quot;&gt;localhost&lt;/server&gt;&#10;  &lt;ssl enabled=&quot;true&quot; /&gt;&#10;&lt;/config&gt;"></textarea>
+                    <textarea class="form-control" id="xmlToYamlInput" placeholder="&lt;config&gt;&#10;  &lt;server port=&quot;8080&quot;&gt;localhost&lt;/server&gt;&#10;  &lt;ssl enabled=&quot;true&quot; /&gt;&#10;&lt;/config&gt;"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -101,7 +101,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('yamlOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="yamlOutput"></pre>
+                    <pre class="form-control" id="yamlOutput"></pre>
                 </div>
             </div>
         </div>
@@ -110,12 +110,12 @@
         <div class="tab-content" id="xml-to-html" style="display: none;">
             <div class="form-group">
                 <label class="form-label">XML Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>XML Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('xmlToHtmlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="xmlToHtmlInput" placeholder="&lt;employees&gt;&#10;  &lt;employee id=&quot;1&quot;&gt;&#10;    &lt;name&gt;John Doe&lt;/name&gt;&#10;    &lt;department&gt;Engineering&lt;/department&gt;&#10;    &lt;salary&gt;75000&lt;/salary&gt;&#10;  &lt;/employee&gt;&#10;&lt;/employees&gt;"></textarea>
+                    <textarea class="form-control" id="xmlToHtmlInput" placeholder="&lt;employees&gt;&#10;  &lt;employee id=&quot;1&quot;&gt;&#10;    &lt;name&gt;John Doe&lt;/name&gt;&#10;    &lt;department&gt;Engineering&lt;/department&gt;&#10;    &lt;salary&gt;75000&lt;/salary&gt;&#10;  &lt;/employee&gt;&#10;&lt;/employees&gt;"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -133,7 +133,7 @@
                     <div class="html-preview" id="htmlPreview"></div>
                     <details style="margin-top: 10px;">
                         <summary style="cursor: pointer; font-weight: bold;">View HTML Source</summary>
-                        <pre class="code-editor" id="htmlOutput" style="margin-top: 10px;"></pre>
+                        <pre class="form-control" id="htmlOutput" style="margin-top: 10px;"></pre>
                     </details>
                 </div>
             </div>
@@ -143,12 +143,12 @@
         <div class="tab-content" id="format-xml" style="display: none;">
             <div class="form-group">
                 <label class="form-label">XML Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>XML Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('formatXmlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="formatXmlInput" placeholder="&lt;root&gt;&lt;item&gt;value&lt;/item&gt;&lt;item&gt;value2&lt;/item&gt;&lt;/root&gt;"></textarea>
+                    <textarea class="form-control" id="formatXmlInput" placeholder="&lt;root&gt;&lt;item&gt;value&lt;/item&gt;&lt;item&gt;value2&lt;/item&gt;&lt;/root&gt;"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -163,7 +163,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('formatOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="formatOutput"></pre>
+                    <pre class="form-control" id="formatOutput"></pre>
                 </div>
             </div>
         </div>

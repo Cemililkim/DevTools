@@ -23,12 +23,12 @@
         <div class="tab-content" id="yaml-to-json">
             <div class="form-group">
                 <label class="form-label">YAML Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>YAML Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('yamlToJsonInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="yamlToJsonInput" placeholder="- name: John&#10;  age: 25&#10;  city: New York&#10;- name: Jane&#10;  age: 30&#10;  city: London"></textarea>
+                    <textarea class="form-control" id="yamlToJsonInput" placeholder="- name: John&#10;  age: 25&#10;  city: New York&#10;- name: Jane&#10;  age: 30&#10;  city: London"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -43,7 +43,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('jsonOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="jsonOutput"></pre>
+                    <pre class="form-control" id="jsonOutput"></pre>
                 </div>
             </div>
         </div>
@@ -52,12 +52,12 @@
         <div class="tab-content" id="yaml-to-xml" style="display: none;">
             <div class="form-group">
                 <label class="form-label">YAML Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>YAML Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('yamlToXmlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="yamlToXmlInput" placeholder="products:&#10;  - name: Laptop&#10;    price: 999.99&#10;    stock: 15&#10;  - name: Mouse&#10;    price: 29.99&#10;    stock: 50"></textarea>
+                    <textarea class="form-control" id="yamlToXmlInput" placeholder="products:&#10;  - name: Laptop&#10;    price: 999.99&#10;    stock: 15&#10;  - name: Mouse&#10;    price: 29.99&#10;    stock: 50"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -72,7 +72,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('xmlOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="xmlOutput"></pre>
+                    <pre class="form-control" id="xmlOutput"></pre>
                 </div>
             </div>
         </div>
@@ -81,12 +81,12 @@
         <div class="tab-content" id="yaml-to-csv" style="display: none;">
             <div class="form-group">
                 <label class="form-label">YAML Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>YAML Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('yamlToCsvInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="yamlToCsvInput" placeholder="- server: localhost&#10;  port: 8080&#10;  ssl: true&#10;- server: remote&#10;  port: 443&#10;  ssl: true"></textarea>
+                    <textarea class="form-control" id="yamlToCsvInput" placeholder="- server: localhost&#10;  port: 8080&#10;  ssl: true&#10;- server: remote&#10;  port: 443&#10;  ssl: true"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -101,7 +101,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('csvOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="csvOutput"></pre>
+                    <pre class="form-control" id="csvOutput"></pre>
                 </div>
             </div>
         </div>
@@ -110,12 +110,12 @@
         <div class="tab-content" id="yaml-to-html" style="display: none;">
             <div class="form-group">
                 <label class="form-label">YAML Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>YAML Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('yamlToHtmlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="yamlToHtmlInput" placeholder="- name: John Doe&#10;  department: Engineering&#10;  salary: 75000&#10;- name: Jane Smith&#10;  department: Marketing&#10;  salary: 65000"></textarea>
+                    <textarea class="form-control" id="yamlToHtmlInput" placeholder="- name: John Doe&#10;  department: Engineering&#10;  salary: 75000&#10;- name: Jane Smith&#10;  department: Marketing&#10;  salary: 65000"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -133,7 +133,7 @@
                     <div class="html-preview" id="htmlPreview"></div>
                     <details style="margin-top: 10px;">
                         <summary style="cursor: pointer; font-weight: bold;">View HTML Source</summary>
-                        <pre class="code-editor" id="htmlOutput" style="margin-top: 10px;"></pre>
+                        <pre class="form-control" id="htmlOutput" style="margin-top: 10px;"></pre>
                     </details>
                 </div>
             </div>
@@ -143,12 +143,12 @@
         <div class="tab-content" id="format-yaml" style="display: none;">
             <div class="form-group">
                 <label class="form-label">YAML Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>YAML Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('formatYamlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="formatYamlInput" placeholder="name:   John&#10;age:30&#10;  city: New York&#10;hobbies:   [reading,  coding]"></textarea>
+                    <textarea class="form-control" id="formatYamlInput" placeholder="name:   John&#10;age:30&#10;  city: New York&#10;hobbies:   [reading,  coding]"></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -163,7 +163,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('formatOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="formatOutput"></pre>
+                    <pre class="form-control" id="formatOutput"></pre>
                 </div>
             </div>
         </div>

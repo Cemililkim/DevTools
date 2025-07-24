@@ -23,12 +23,12 @@
         <div class="tab-content" id="json-to-csv">
             <div class="form-group">
                 <label class="form-label">JSON Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>JSON Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('jsonToCsvInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="jsonToCsvInput" placeholder='[{"name": "John", "age": 25}, {"name": "Jane", "age": 30}]'></textarea>
+                    <textarea class="form-control" id="jsonToCsvInput" placeholder='[{"name": "John", "age": 25}, {"name": "Jane", "age": 30}]'></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -43,7 +43,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('csvOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="csvOutput"></pre>
+                    <pre class="form-control" id="csvOutput"></pre>
                 </div>
             </div>
         </div>
@@ -52,12 +52,12 @@
         <div class="tab-content" id="json-to-xml" style="display: none;">
             <div class="form-group">
                 <label class="form-label">JSON Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>JSON Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('jsonToXmlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="jsonToXmlInput" placeholder='{"person": {"name": "John", "age": 25, "hobbies": ["reading", "programming"]}}'></textarea>
+                    <textarea class="form-control" id="jsonToXmlInput" placeholder='{"person": {"name": "John", "age": 25, "hobbies": ["reading", "programming"]}}'></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -72,7 +72,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('xmlOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="xmlOutput"></pre>
+                    <pre class="form-control" id="xmlOutput"></pre>
                 </div>
             </div>
         </div>
@@ -81,12 +81,12 @@
         <div class="tab-content" id="json-to-yaml" style="display: none;">
             <div class="form-group">
                 <label class="form-label">JSON Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>JSON Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('jsonToYamlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="jsonToYamlInput" placeholder='{"server": {"host": "localhost", "port": 8080, "features": ["ssl", "compression"]}}'></textarea>
+                    <textarea class="form-control" id="jsonToYamlInput" placeholder='{"server": {"host": "localhost", "port": 8080, "features": ["ssl", "compression"]}}'></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -101,7 +101,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('yamlOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="yamlOutput"></pre>
+                    <pre class="form-control" id="yamlOutput"></pre>
                 </div>
             </div>
         </div>
@@ -110,12 +110,12 @@
         <div class="tab-content" id="json-to-html" style="display: none;">
             <div class="form-group">
                 <label class="form-label">JSON Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>JSON Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('jsonToHtmlInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="jsonToHtmlInput" placeholder='[{"name": "John", "age": 25, "city": "New York"}, {"name": "Jane", "age": 30, "city": "London"}]'></textarea>
+                    <textarea class="form-control" id="jsonToHtmlInput" placeholder='[{"name": "John", "age": 25, "city": "New York"}, {"name": "Jane", "age": 30, "city": "London"}]'></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -133,7 +133,7 @@
                     <div class="html-preview" id="htmlPreview"></div>
                     <details style="margin-top: 10px;">
                         <summary style="cursor: pointer; font-weight: bold;">View HTML Source</summary>
-                        <pre class="code-editor" id="htmlOutput" style="margin-top: 10px;"></pre>
+                        <pre class="form-control" id="htmlOutput" style="margin-top: 10px;"></pre>
                     </details>
                 </div>
             </div>
@@ -143,12 +143,12 @@
         <div class="tab-content" id="format-json" style="display: none;">
             <div class="form-group">
                 <label class="form-label">JSON Data:</label>
-                <div class="code-editor-container">
-                    <div class="code-editor-header">
+                <div class="form-control-container">
+                    <div class="form-control-header">
                         <span>JSON Input</span>
                         <button type="button" class="btn btn-secondary btn-sm ml-auto" onclick="clearInput('formatJsonInput')">Clear</button>
                     </div>
-                    <textarea class="code-editor" id="formatJsonInput" placeholder='{"name":"John","age":25,"city":"New York"}'></textarea>
+                    <textarea class="form-control" id="formatJsonInput" placeholder='{"name":"John","age":25,"city":"New York"}'></textarea>
                 </div>
             </div>
             <div class="form-group">
@@ -163,7 +163,7 @@
                     <button type="button" class="btn btn-secondary btn-sm" onclick="copyToClipboard('formatOutput')">Copy</button>
                 </div>
                 <div class="results-content">
-                    <pre class="code-editor" id="formatOutput"></pre>
+                    <pre class="form-control" id="formatOutput"></pre>
                 </div>
             </div>
         </div>
