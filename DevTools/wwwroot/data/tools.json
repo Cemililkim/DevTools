@@ -74,6 +74,12 @@
           "description": "Create custom .gitignore files for your projects."
         },
         {
+          "name": "Markdown Previewer",
+          "url": "/MarkdownPreviewer/Index",
+          "title": "Markdown Previewer",
+          "description": "Preview your markdown files easily."
+        },
+        {
           "name": "Smtp Tester",
           "url": "/SmtpTester/Index",
           "title": "Smtp Tester",

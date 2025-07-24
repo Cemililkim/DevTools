@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Markdown Editor & Preview";
+}
+
+<div class="container">
+    <div class="tool-header">
+        <h1 class="tool-title">Markdown Previewer</h1>
+        <p class="tool-description">Write Markdown text and see live preview instantly!</p>
+    </div>
+
+    <div class="form-group">
+        <textarea id="mdInput" class="form-control" rows="10" placeholder="Write your markdown here..."></textarea>
+    </div>
+
+    <div class="form-group">
+        <button class="btn btn-primary" onclick="updatePreview()">Update Preview</button>
+        <button class="btn btn-secondary ms-2" onclick="copyPreview()">Copy Preview HTML</button>
+    </div>
+
+    <div id="alertContainer"></div>
+
+    <div class="form-group mt-4">
+        <div id="mdPreview" class="form-control"></div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+        function showAlert(message, type = 'danger') {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => { alertContainer.innerHTML = ''; }, 3000);
+        }
+
+        function updatePreview() {
+            const markdownText = document.getElementById('mdInput').value;
+            try {
+                const html = marked.parse(markdownText);
+                document.getElementById('mdPreview').innerHTML = html;
+            } catch (e) {
+                showAlert('Error parsing markdown: ' + e.message, 'danger');
+            }
+        }
+
+        function copyPreview() {
+            const htmlContent = document.getElementById('mdPreview').innerHTML;
+            navigator.clipboard.writeText(htmlContent).then(() => {
+                showAlert('Preview HTML copied to clipboard!', 'success');
+            }).catch(() => {
+                showAlert('Failed to copy preview.', 'warning');
+            });
+        }
+
+        window.onload = () => {
+            updatePreview();
+        };
+    </script>
+}
