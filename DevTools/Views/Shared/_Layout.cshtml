@@ -90,17 +90,6 @@
                                 Development Tools
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="developmentDropdown">
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" asp-controller="DiffChecker" asp-action="Index">
-                                        <i class="bi bi-check2-square"></i> Diff Checker
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item d-flex align-items-center" asp-controller="LoremIpsumGenerator" asp-action="Index">
-                                        <i class="bi bi-body-text"></i> Lorem Ipsum Generator
-                                    </a>
-                                </li>
-                                <li>
                                     <a class="dropdown-item d-flex align-items-center" asp-controller="GitIgnoreGenerator" asp-action="Index">
                                         <i class="bi bi-git"></i> .gitignore Generator
                                     </a>
@@ -122,6 +111,41 @@
                                 <li>
                                     <a class="dropdown-item d-flex align-items-center" asp-controller="ColorConverter" asp-action="Index">
                                         <i class="bi bi-eyedropper"></i> Color Converter
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Text Tools -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle fw-semibold" href="#" id="textDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                Text Tools
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="textDropdown">
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="DiffChecker" asp-action="Index">
+                                        <i class="bi bi-check2-square"></i> Diff Checker
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="LoremIpsumGenerator" asp-action="Index">
+                                        <i class="bi bi-body-text"></i> Lorem Ipsum Generator
+                                    </a>
+                                </li>
+                                <li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="CaseConverter" asp-action="Index">
+                                        <i class="bi bi-alphabet"></i> Case Converter
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="WordCounter" asp-action="Index">
+                                        <i class="bi bi-0-square-fill"></i> Word Counter
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center" asp-controller="DuplicateLineRemover" asp-action="Index">
+                                        <i class="bi bi-eraser-fill"></i> Duplicate Line Remover
                                     </a>
                                 </li>
                             </ul>

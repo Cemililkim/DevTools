@@ -33,7 +33,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/uuid/8.3.2/uuid.min.js"></script>
 
     <script>
-        function showAlert(message, type = 'info') {
+        function showAlert(message, type = 'error') {
             const alertContainer = document.getElementById('alertContainer');
             alertContainer.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
             setTimeout(() => { alertContainer.innerHTML = ''; }, 3000);
